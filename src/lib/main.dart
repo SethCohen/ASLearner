@@ -25,23 +25,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'ASL Learner',
           theme: ThemeData(
-            primarySwatch: Colors.deepPurple,
-            scaffoldBackgroundColor: const Color(0xFF000000),
-            disabledColor: Colors.white70,
-            textTheme: const TextTheme(
-              subtitle1: TextStyle(color: Colors.white70),
-              caption: TextStyle(color: Colors.white70),
-              bodyText2: TextStyle(color: Colors.white70),
-              headline4: TextStyle(color: Colors.white70),
-            ),
-            cardTheme: const CardTheme(
-              color: Color(0xFF121219),
-              shadowColor: Colors.white38,
-              elevation: 3,
-            ),
-            popupMenuTheme: const PopupMenuThemeData(
-                color: Color(0xFF15151C),
-                textStyle: TextStyle(color: Colors.white70)),
+            brightness: Brightness.dark,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: const HomePage(),
@@ -51,4 +35,3 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-
