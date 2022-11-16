@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/google_provider.dart';
 
 class LoggedIn extends StatefulWidget {
   const LoggedIn({Key? key}) : super(key: key);
@@ -42,8 +45,12 @@ class _LoggedInState extends State<LoggedIn> {
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
-            onPressed: () {},
-            child: const Text('Profile'),
+            onPressed: () {
+              final provider =
+              Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.googleLogout();
+            },
+            child: const Text('Sign Out'),
           ),
         ],
       ),
