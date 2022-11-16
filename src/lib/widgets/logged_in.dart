@@ -42,16 +42,13 @@ class _LoggedInState extends State<LoggedIn> {
             child: const Text('Creator'),
           ),
           TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            ),
-            onPressed: () {
-              final provider =
-              Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.googleLogout();
-            },
-            child: const Text('Sign Out'),
-          ),
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              ),
+              onPressed: () => _showManageAccountPage(context),
+              child: const Text(
+                'Manage Account',
+              )),
         ],
       ),
       body: Center(
@@ -62,4 +59,8 @@ class _LoggedInState extends State<LoggedIn> {
       ),
     );
   }
+  _showManageAccountPage(context) {
+    Navigator.pushNamed(context, '/manageAccount');
+  }
+
 }
