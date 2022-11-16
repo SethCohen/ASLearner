@@ -7,7 +7,7 @@ class ManagePage extends StatefulWidget {
   const ManagePage({Key? key}) : super(key: key);
 
   @override
-  _ManagePageState createState() => _ManagePageState();
+  State<ManagePage> createState() => _ManagePageState();
 }
 
 class _ManagePageState extends State<ManagePage> {
@@ -23,7 +23,7 @@ class _ManagePageState extends State<ManagePage> {
           children: [
             TextButton(
               style: TextButton.styleFrom(
-                primary: Colors.white70,
+                foregroundColor: Colors.white70,
                 alignment: Alignment.centerLeft,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -35,7 +35,7 @@ class _ManagePageState extends State<ManagePage> {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                primary: Colors.white70,
+                foregroundColor: Colors.white70,
                 alignment: Alignment.centerLeft,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -61,41 +61,40 @@ class _ManagePageState extends State<ManagePage> {
     showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          backgroundColor: Colors.grey.shade900,
-          title: const Text('Are You Sure?',
-              style: TextStyle(color: Colors.white)),
-          content: const Text(
-              'You\'re trying to delete your account.\nYour account and data will be deleted immediately. This action is not reversible.\nPlease hold YES to confirm.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              style:
-              const ButtonStyle(splashFactory: NoSplash.splashFactory),
-              child: const Text('Cancel',
+              backgroundColor: Colors.grey.shade900,
+              title: const Text('Are You Sure?',
                   style: TextStyle(color: Colors.white)),
-            ),
-            TextButton(
-              onLongPress: () {
-                FirebaseAuth.instance.currentUser!.delete();
-                final provider = Provider.of<GoogleSignInProvider>(context,
-                    listen: false);
-                provider.googleLogout();
-                Navigator.pop(context);
+              content: const Text(
+                  'You\'re trying to delete your account.\nYour account and data will be deleted immediately. This action is not reversible.\nPlease hold YES to confirm.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style:
+                      const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                  child: const Text('Cancel',
+                      style: TextStyle(color: Colors.white)),
+                ),
+                TextButton(
+                  onLongPress: () {
+                    FirebaseAuth.instance.currentUser!.delete();
+                    final provider = Provider.of<GoogleSignInProvider>(context,
+                        listen: false);
+                    provider.googleLogout();
+                    Navigator.pop(context);
 
-                const snackBar = SnackBar(
-                  content: Text('Account Deleted'),
-                );
+                    const snackBar = SnackBar(
+                      content: Text('Account Deleted'),
+                    );
 
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-                Navigator.pop(context);
-              },
-              onPressed: () {},
-              child:
-              const Text('Yes', style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        ));
+                    Navigator.pop(context);
+                  },
+                  onPressed: () {},
+                  child:
+                      const Text('Yes', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ));
   }
-
 }

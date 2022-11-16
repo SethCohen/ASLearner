@@ -1,14 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/google_provider.dart';
 
 class LoggedIn extends StatefulWidget {
   const LoggedIn({Key? key}) : super(key: key);
 
   @override
-  _LoggedInState createState() => _LoggedInState();
+  State<LoggedIn> createState() => _LoggedInState();
 }
 
 class _LoggedInState extends State<LoggedIn> {
@@ -59,8 +56,8 @@ class _LoggedInState extends State<LoggedIn> {
       ),
     );
   }
+
   _showManageAccountPage(context) {
     Navigator.pushNamed(context, '/manageAccount');
   }
-
 }
