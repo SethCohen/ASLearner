@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/SethCohen/ASL/compare/v1.0.0...v1.1.0) (2022-10-27)
+
+
+### Features
+
+* **?:** partial implementation of google sign in authentication ([6436231](https://github.com/SethCohen/ASL/commit/6436231d3de8312a95616bfafd6fa32e74872e50))
+
 ## 1.0.0 (2022-09-29)
 
 
