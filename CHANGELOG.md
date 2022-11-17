@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/SethCohen/ASL/compare/v1.2.0...v1.2.1) (2022-11-17)
+
+
+### Miscellaneous
+
+* updated README.md ([4f1cda1](https://github.com/SethCohen/ASL/commit/4f1cda17b3c78d2e3d0d9ae32ddbe9db16e773fd))
+
 ## [1.2.0](https://github.com/SethCohen/ASL/compare/v1.1.0...v1.2.0) (2022-11-17)
 
 
