@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/SethCohen/ASL/compare/v1.1.0...v1.2.0) (2022-11-17)
+
+
+### Features
+
+* added fully functional login/logout system using Google authentication and Firebase ([25474cb](https://github.com/SethCohen/ASL/commit/25474cbae7de97c1a1ee3e658a58785580420e68)), closes [#3](https://github.com/SethCohen/ASL/issues/3)
+* added profile account manager page and functionality ([081b457](https://github.com/SethCohen/ASL/commit/081b45775133520d92daa088b34b625329a7a0d3))
+* changed app theme ([8bd0bf7](https://github.com/SethCohen/ASL/commit/8bd0bf7c8e9689909675955bc0b311e5d760b3cd))
+
+
+### Code Refactoring
+
+* minor deprecation and linting fixes ([59c52d7](https://github.com/SethCohen/ASL/commit/59c52d7e4e25a58c64cffb9d816f5735304b12ce))
+
 ## [1.1.0](https://github.com/SethCohen/ASL/compare/v1.0.0...v1.1.0) (2022-10-27)
 
 
