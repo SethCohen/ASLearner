@@ -1,3 +1,4 @@
+import 'package:asl/widgets/flashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,8 @@ class Lesson extends StatefulWidget {
 }
 
 class _LessonState extends State<Lesson> {
+  int _currentCardIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final lesson =
@@ -16,26 +19,44 @@ class _LessonState extends State<Lesson> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(lesson.id),
+          title: Text(_convertIdToTitle(lesson.id)),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: lesson.reference.collection('cards').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                final cards = snapshot.data!.docs.map((document) {
+                  final data = document.data() as Map<String, dynamic>;
+                  return Flashcard(data: data);
+                }).toList();
+
                 return Center(
-                    child: ListView(
-                  children: snapshot.data!.docs.map((document) {
-                    final data = document.data() as Map<String, dynamic>;
-                    return Card(
-                        child: Column(children: [
-                      Text(data['title']),
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Image.network(data['assetUrl']),
-                      ),
-                    ]));
-                  }).toList(),
+                    child: Column(
+                  children: [
+                    cards[_currentCardIndex],
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _currentCardIndex =
+                                    (_currentCardIndex - 1) % cards.length;
+                              });
+                            },
+                            child: const Text('Previous'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _currentCardIndex =
+                                    (_currentCardIndex + 1) % cards.length;
+                              });
+                            },
+                            child: const Text('Next'),
+                          ),
+                        ])
+                  ],
                 ));
               } else if (snapshot.hasError) {
                 return const Center(child: Text('Something went wrong!'));
@@ -43,5 +64,9 @@ class _LessonState extends State<Lesson> {
                 return const Center(child: CircularProgressIndicator());
               }
             }));
+  }
+
+  String _convertIdToTitle(String input) {
+    return input.replaceAll('lesson', 'Lesson ');
   }
 }

@@ -22,7 +22,7 @@ class _LessonsPageState extends State<LessonsPage> {
               children: snapshot.data!.docs.map((document) {
                 return Card(
                     child: ListTile(
-                  title: Text(document.id),
+                  title: Text(_convertIdToTitle(document.id)),
                   onTap: () async {
                     await Navigator.pushNamed(context, '/lesson',
                         arguments: document);
@@ -36,5 +36,9 @@ class _LessonsPageState extends State<LessonsPage> {
             return const Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  String _convertIdToTitle(String input) {
+    return input.replaceAll('lesson', 'Lesson ');
   }
 }
