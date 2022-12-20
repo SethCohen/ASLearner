@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/SethCohen/ASL/compare/v1.2.1...v1.3.0) (2022-12-20)
+
+
+### Features
+
+* added additional pages ([1a7e0d3](https://github.com/SethCohen/ASL/commit/1a7e0d379d9bcc3e1c219dc467ae67a172a30cb3))
+* added lesson card system ([53a605b](https://github.com/SethCohen/ASL/commit/53a605bfff62831fb93607e0a5864a2661076e26))
+
+
+### Miscellaneous
+
+* updated README.md ([d87c182](https://github.com/SethCohen/ASL/commit/d87c182cb09d577261986cac97599d008d6615a8))
+
 ## [1.2.1](https://github.com/SethCohen/ASL/compare/v1.2.0...v1.2.1) (2022-11-17)
 
 
