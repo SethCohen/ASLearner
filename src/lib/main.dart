@@ -1,4 +1,5 @@
 import 'package:asl/pages/manage_page.dart';
+import 'package:asl/widgets/lesson.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:asl/pages/home_page.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           home: const HomePage(),
           routes: <String, WidgetBuilder>{
             '/manageAccount': (BuildContext context) => const ManagePage(),
+            '/lesson': (BuildContext context) => const Lesson(),
           },
         ));
   }
