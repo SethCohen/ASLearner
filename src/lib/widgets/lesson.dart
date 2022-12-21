@@ -31,32 +31,35 @@ class _LessonState extends State<Lesson> {
                 }).toList();
 
                 return Center(
-                    child: Column(
-                  children: [
-                    cards[_currentCardIndex],
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _currentCardIndex =
-                                    (_currentCardIndex - 1) % cards.length;
-                              });
-                            },
-                            child: const Text('Previous'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _currentCardIndex =
-                                    (_currentCardIndex + 1) % cards.length;
-                              });
-                            },
-                            child: const Text('Next'),
-                          ),
-                        ])
-                  ],
+                    child: SizedBox(
+                  width: 500,
+                  child: Column(
+                    children: [
+                      cards[_currentCardIndex],
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _currentCardIndex =
+                                      (_currentCardIndex - 1) % cards.length;
+                                });
+                              },
+                              child: const Text('Previous'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _currentCardIndex =
+                                      (_currentCardIndex + 1) % cards.length;
+                                });
+                              },
+                              child: const Text('Next'),
+                            ),
+                          ])
+                    ],
+                  ),
                 ));
               } else if (snapshot.hasError) {
                 return const Center(child: Text('Something went wrong!'));

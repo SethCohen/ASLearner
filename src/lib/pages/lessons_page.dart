@@ -18,17 +18,23 @@ class _LessonsPageState extends State<LessonsPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Center(
-                child: ListView(
-              children: snapshot.data!.docs.map((document) {
-                return Card(
-                    child: ListTile(
-                  title: Text(_convertIdToTitle(document.id)),
-                  onTap: () async {
-                    await Navigator.pushNamed(context, '/lesson',
-                        arguments: document);
-                  },
-                ));
-              }).toList(),
+                child: SizedBox(
+              width: 500,
+              child: ListView(
+                children: snapshot.data!.docs.map((document) {
+                  return Card(
+                      child: ListTile(
+                    leading: const Icon(Icons.book),
+                    // TODO change colour of icon to green upon completion of lesson
+                    iconColor: Colors.grey[850],
+                    title: Text(_convertIdToTitle(document.id)),
+                    onTap: () async {
+                      await Navigator.pushNamed(context, '/lesson',
+                          arguments: document);
+                    },
+                  ));
+                }).toList(),
+              ),
             ));
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong!'));

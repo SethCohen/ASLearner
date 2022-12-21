@@ -9,9 +9,7 @@ class Flashcard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        elevation: 7,
-        shadowColor: Colors.grey,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Center(
@@ -21,7 +19,12 @@ class Flashcard extends StatelessWidget {
                 data['title'],
                 style: const TextStyle(fontSize: 20),
               ),
-              Image.network(data['assetUrl'])
+              const SizedBox(
+                height: 10,
+              ),
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(data['assetUrl'])),
             ],
           )),
         ),
