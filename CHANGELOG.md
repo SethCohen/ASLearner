@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0](https://github.com/SethCohen/ASL/compare/v1.3.0...v1.4.0) (2022-12-21)
+
+
+### Features
+
+* added basic flashcard system ([9c30687](https://github.com/SethCohen/ASL/commit/9c30687bf9e8cbe69e49ed68149c6fd6b14c48dc))
+* added flashcard instructions display ([43faac7](https://github.com/SethCohen/ASL/commit/43faac7da02d3e15c19c937891aae36de8a98b07))
+* added spaced repetition algorithm dependency ([fcc4c64](https://github.com/SethCohen/ASL/commit/fcc4c643229b2190607a20249c3d2eee495fd73f))
+
+
+### Styles
+
+* layout design changes ([9f22710](https://github.com/SethCohen/ASL/commit/9f2271014d0eeb543856a20187373293a2ca75c5))
+
 ## [1.3.0](https://github.com/SethCohen/ASL/compare/v1.2.1...v1.3.0) (2022-12-20)
 
 
