@@ -10,6 +10,6 @@ class CreatorPage extends StatefulWidget {
 class _CreatorPageState extends State<CreatorPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: const Text('Creator Page'));
+    return const Text('Creator Page');
   }
 }

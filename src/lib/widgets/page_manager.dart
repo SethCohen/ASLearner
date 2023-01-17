@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:asl/widgets/logged_in.dart';
-import 'package:asl/widgets/sign_in.dart';
+import 'package:asl/pages/landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class PageManager extends StatelessWidget {
+  const PageManager({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
             } else if (snapshot.hasError) {
               return const Center(child: Text('Something went wrong!'));
             } else {
-              return const SignIn();
+              return const LandingPage();
             }
           }));
 }
