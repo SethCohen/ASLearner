@@ -11,6 +11,7 @@ class Lesson extends StatefulWidget {
 
 class _LessonState extends State<Lesson> {
   int _currentCardIndex = 0;
+  int _cardsLength = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,14 @@ class _LessonState extends State<Lesson> {
     return Scaffold(
         appBar: AppBar(
           title: Text(_convertIdToTitle(lesson.id)),
+          toolbarHeight: 80,
+          backgroundColor: const Color(0XFF292929),
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.w500,
+          ),
+          elevation: 10,
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: lesson.reference.collection('cards').snapshots(),
@@ -27,40 +36,28 @@ class _LessonState extends State<Lesson> {
               if (snapshot.hasData) {
                 final cards = snapshot.data!.docs.map((document) {
                   final data = document.data() as Map<String, dynamic>;
-                  return Flashcard(data: data);
+                  _cardsLength = snapshot.data!.docs.length;
+                  return Flashcard(
+                    handleCardIndex: _incrementCardIndex,
+                    data: data,
+                  );
                 }).toList();
 
-                return Center(
-                    child: SizedBox(
-                  width: 500,
-                  child: Column(
-                    children: [
-                      cards[_currentCardIndex],
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _currentCardIndex =
-                                      (_currentCardIndex - 1) % cards.length;
-                                });
-                              },
-                              child: const Text('Previous'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _currentCardIndex =
-                                      (_currentCardIndex + 1) % cards.length;
-                                });
-                              },
-                              child: const Text('Next'),
-                            ),
-                          ])
-                    ],
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: 360,
+                        child: IndexedStack(
+                          index: _currentCardIndex,
+                          children: cards,
+                        ),
+                      ),
+                    ),
                   ),
-                ));
+                );
               } else if (snapshot.hasError) {
                 return const Center(child: Text('Something went wrong!'));
               } else {
@@ -71,5 +68,16 @@ class _LessonState extends State<Lesson> {
 
   String _convertIdToTitle(String input) {
     return input.replaceAll('lesson', 'Lesson ');
+  }
+
+  void _incrementCardIndex() {
+    setState(() {
+      if (_currentCardIndex == _cardsLength - 1) {
+        // TODO mark lesson as complete in database
+        Navigator.pop(context);
+      } else {
+        _currentCardIndex++;
+      }
+    });
   }
 }

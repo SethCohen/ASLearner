@@ -20,31 +20,31 @@ class _LessonsPageState extends State<LessonsPage> {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
-                  child: SizedBox(
-                width: 360,
-                child: ListView(
-                  children: snapshot.data!.docs.map((document) {
-                    return Card(
-                        elevation: 8,
-                        color: const Color(0xff292929),
-                        child: ListTile(
-                          visualDensity: VisualDensity.comfortable,
-                          trailing: const Icon(
-                            Icons.star_rounded,
-                            size: 32,
-                          ),
-                          // ignore: todo
-                          // TODO change colour of icon to gold upon completion of lesson
-                          iconColor: const Color(0xff4F4F4F),
-                          title: Text(_convertIdToTitle(document.id)),
-                          onTap: () async {
-                            await Navigator.pushNamed(context, '/lesson',
-                                arguments: document);
-                          },
-                        ));
-                  }).toList(),
+                child: SizedBox(
+                  width: 360,
+                  child: ListView(
+                    children: snapshot.data!.docs.map((document) {
+                      return Card(
+                          elevation: 8,
+                          color: const Color(0xff292929),
+                          child: ListTile(
+                            visualDensity: VisualDensity.comfortable,
+                            trailing: const Icon(
+                              Icons.star_rounded,
+                              size: 32,
+                            ),
+                            // TODO change colour of icon to gold upon completion of lesson
+                            iconColor: const Color(0xff4F4F4F),
+                            title: Text(_convertIdToTitle(document.id)),
+                            onTap: () async {
+                              await Navigator.pushNamed(context, '/lesson',
+                                  arguments: document);
+                            },
+                          ));
+                    }).toList(),
+                  ),
                 ),
-              )),
+              ),
             );
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong!'));

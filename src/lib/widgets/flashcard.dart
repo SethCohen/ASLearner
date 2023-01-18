@@ -1,7 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class Flashcard extends StatefulWidget {
-  const Flashcard({super.key, required this.data});
+  const Flashcard({
+    super.key,
+    required this.handleCardIndex,
+    required this.data,
+  });
+  final Function() handleCardIndex;
   final Map<String, dynamic> data;
 
   @override
@@ -9,50 +16,89 @@ class Flashcard extends StatefulWidget {
 }
 
 class _FlashcardState extends State<Flashcard> {
-  bool _isVisible = false;
+  bool _isBlurred = true;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Center(
-              child: Column(
-            children: [
-              Text(
-                widget.data['title'],
-                style: const TextStyle(fontSize: 20),
+    return Card(
+      color: const Color(0XFF121212),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: Text(
+              widget.data['title'],
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          // TODO replace network images with controllable video player
+          ClipRRect(
+            child: ImageFiltered(
+                enabled: _isBlurred,
+                imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
+                child: Image.network(widget.data['assetUrl'])),
+          ),
+          // TODO add media control buttons: stop, prev frame, play/pause, next frame, playback speed
+          // TODO add instructional body text
+          Visibility(
+              visible: !_isBlurred,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // TODO implement spaced-repetition algorithm
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      textStyle: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        widget.handleCardIndex();
+                      });
+                    },
+                    child: const Text('Hard'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.blueAccent,
+                      textStyle: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        widget.handleCardIndex();
+                      });
+                    },
+                    child: const Text('Medium'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.greenAccent,
+                      textStyle: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        widget.handleCardIndex();
+                      });
+                    },
+                    child: const Text('Easy'),
+                  ),
+                ],
+              )),
+          Visibility(
+            visible: _isBlurred,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(widget.data['assetUrl'])),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                      icon: const Icon(Icons.info),
-                      onPressed: () {
-                        setState(() {
-                          _isVisible = !_isVisible;
-                        });
-                      })),
-              Visibility(
-                visible: _isVisible,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(widget.data['instructions'].length != 0
-                      ? widget.data['instructions']
-                      : "Lorem Ipsum"),
-                ),
-              ),
-            ],
-          )),
-        ),
+              onPressed: () {
+                setState(() {
+                  _isBlurred = !_isBlurred;
+                });
+              },
+              child: const Text('Reveal'),
+            ),
+          )
+        ],
       ),
     );
   }
