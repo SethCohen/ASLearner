@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0](https://github.com/SethCohen/ASL/compare/v1.4.0...v1.5.0) (2023-01-18)
+
+
+### Features
+
+* restyled landing page ([2185548](https://github.com/SethCohen/ASL/commit/2185548af942697dae0bba0b1bb091888a3581b7))
+* restyled lesson and flashcard components ([7da4afb](https://github.com/SethCohen/ASL/commit/7da4afbc2ea2da33ec6ad699f017325b9d228e27))
+* restyled lessons page ([a059f82](https://github.com/SethCohen/ASL/commit/a059f8299580857f53ff1c0e55fb40c2bb17c200))
+* restyled page placeholder widgets ([592fe31](https://github.com/SethCohen/ASL/commit/592fe31cb5bae72f2db5f6a44dc738d74f39299a))
+
 ## [1.4.0](https://github.com/SethCohen/ASL/compare/v1.3.0...v1.4.0) (2022-12-21)
 
 
