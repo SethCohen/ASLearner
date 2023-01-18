@@ -17,25 +17,35 @@ class _LessonsPageState extends State<LessonsPage> {
         stream: FirebaseFirestore.instance.collection("lessons").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Center(
-                child: SizedBox(
-              width: 500,
-              child: ListView(
-                children: snapshot.data!.docs.map((document) {
-                  return Card(
-                      child: ListTile(
-                    leading: const Icon(Icons.book),
-                    // TODO change colour of icon to green upon completion of lesson
-                    iconColor: Colors.grey[850],
-                    title: Text(_convertIdToTitle(document.id)),
-                    onTap: () async {
-                      await Navigator.pushNamed(context, '/lesson',
-                          arguments: document);
-                    },
-                  ));
-                }).toList(),
-              ),
-            ));
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                  child: SizedBox(
+                width: 360,
+                child: ListView(
+                  children: snapshot.data!.docs.map((document) {
+                    return Card(
+                        elevation: 8,
+                        color: const Color(0xff292929),
+                        child: ListTile(
+                          visualDensity: VisualDensity.comfortable,
+                          trailing: const Icon(
+                            Icons.star_rounded,
+                            size: 32,
+                          ),
+                          // ignore: todo
+                          // TODO change colour of icon to gold upon completion of lesson
+                          iconColor: const Color(0xff4F4F4F),
+                          title: Text(_convertIdToTitle(document.id)),
+                          onTap: () async {
+                            await Navigator.pushNamed(context, '/lesson',
+                                arguments: document);
+                          },
+                        ));
+                  }).toList(),
+                ),
+              )),
+            );
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong!'));
           } else {

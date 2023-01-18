@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:asl/widgets/logged_in.dart';
+import 'package:asl/pages/home_page.dart';
 import 'package:asl/pages/landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,14 +11,14 @@ class PageManager extends StatelessWidget {
       body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            bool isSignedIn = false;
+
+            if (snapshot.connectionState == ConnectionState.active) {
+              isSignedIn = snapshot.hasData;
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasData) {
-              return const LoggedIn();
-            } else if (snapshot.hasError) {
-              return const Center(child: Text('Something went wrong!'));
-            } else {
-              return const LandingPage();
             }
+
+            return isSignedIn ? const HomePage() : const LandingPage();
           }));
 }

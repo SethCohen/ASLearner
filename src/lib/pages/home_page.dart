@@ -8,14 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoggedIn extends StatefulWidget {
-  const LoggedIn({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<LoggedIn> createState() => _LoggedInState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _LoggedInState extends State<LoggedIn> {
+class _HomePageState extends State<HomePage> {
   CollectionReference lessons =
       FirebaseFirestore.instance.collection('lessons');
   final user = FirebaseAuth.instance.currentUser!;
@@ -34,7 +34,15 @@ class _LoggedInState extends State<LoggedIn> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('ASL Learner'),
+            toolbarHeight: 80,
+            backgroundColor: const Color(0XFF292929),
+            title: const Text('ASLearner'),
+            titleTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.w500,
+            ),
+            elevation: 10,
             actions: <Widget>[
               TextButton(
                 style: TextButton.styleFrom(
@@ -45,18 +53,13 @@ class _LoggedInState extends State<LoggedIn> {
                     _selectedIndex = 0;
                   });
                 },
-                child: const Text('Lessons'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                child: const Text(
+                  'Lessons',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child: const Text('Dictionary'),
               ),
               TextButton(
                 style: TextButton.styleFrom(
@@ -67,7 +70,30 @@ class _LoggedInState extends State<LoggedIn> {
                     _selectedIndex = 2;
                   });
                 },
-                child: const Text('Review'),
+                child: const Text(
+                  'Review',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
+                child: const Text(
+                  'Dictionary',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
               TextButton(
                 style: TextButton.styleFrom(
@@ -78,11 +104,18 @@ class _LoggedInState extends State<LoggedIn> {
                     _selectedIndex = 3;
                   });
                 },
-                child: const Text('Creator'),
+                child: const Text(
+                  'Creator',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
               PopupMenuButton(
-                icon:
-                    CircleAvatar(backgroundImage: NetworkImage(user.photoURL!)),
+                icon: CircleAvatar(
+                  backgroundImage: NetworkImage(user.photoURL!),
+                ),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     child: TextButton(
