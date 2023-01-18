@@ -10,6 +10,6 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
-    return const Text('Review Page');
+    return const Center(child: CircularProgressIndicator());
   }
 }

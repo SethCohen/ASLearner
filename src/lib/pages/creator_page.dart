@@ -10,6 +10,6 @@ class CreatorPage extends StatefulWidget {
 class _CreatorPageState extends State<CreatorPage> {
   @override
   Widget build(BuildContext context) {
-    return const Text('Creator Page');
+    return const Center(child: CircularProgressIndicator());
   }
 }

@@ -10,6 +10,6 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
-    return const Text('Dictionary Page');
+    return const Center(child: CircularProgressIndicator());
   }
 }
