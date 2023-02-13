@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.6.0](https://github.com/SethCohen/ASL/compare/v1.5.0...v1.6.0) (2023-02-13)
+
+
+### Features
+
+* added full implementation of spaced repetition ([3c5959d](https://github.com/SethCohen/ASL/commit/3c5959de1c4fcea42f8f8a94d71d65bbf742f74e))
+* added streak and last login tracking ([b4c9d86](https://github.com/SethCohen/ASL/commit/b4c9d867db552f36d9f95aef99fdce7e1379a95d))
+
+
+### Miscellaneous
+
+* added docker ([817dcc9](https://github.com/SethCohen/ASL/commit/817dcc9dd785ac7e9ca8f86d99f8d6dda52f8599))
+* updated dependencies ([41d21ca](https://github.com/SethCohen/ASL/commit/41d21cae26790b2036ac2aa64c4f84b79e062eb4))
+* updated gitignore ([c79d385](https://github.com/SethCohen/ASL/commit/c79d3855a6d677b11a6fc59fd22266a405cafb98))
+
 ## [1.5.0](https://github.com/SethCohen/ASL/compare/v1.4.0...v1.5.0) (2023-01-18)
 
 
