@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LessonsPage extends StatefulWidget {
@@ -9,44 +10,61 @@ class LessonsPage extends StatefulWidget {
 }
 
 class _LessonsPageState extends State<LessonsPage> {
-  CollectionReference dreams = FirebaseFirestore.instance.collection('lessons');
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("lessons").snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: SizedBox(
-                  width: 360,
-                  child: ListView(
-                    children: snapshot.data!.docs.map((document) {
+        builder: (context, snapshot1) {
+          if (snapshot1.hasData) {
+            return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(user.uid)
+                  .collection("progress")
+                  .snapshots(),
+              builder: (context, snapshot2) {
+                if (snapshot2.hasData) {
+                  final lessons = snapshot1.data!.docs;
+                  final progress = snapshot2.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: lessons.length,
+                    itemBuilder: (context, index) {
+                      final lesson = lessons[index];
+                      final lessonId = lesson.id;
+                      final lessonTitle = _convertIdToTitle(lessonId);
+
+                      if (!progress.any((element) => element.id == lessonId)) {
+                        FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(user.uid)
+                            .collection("progress")
+                            .doc(lessonId)
+                            .set({"complete": false});
+                      }
+
                       return Card(
-                          elevation: 8,
-                          color: const Color(0xff292929),
-                          child: ListTile(
-                            visualDensity: VisualDensity.comfortable,
-                            trailing: const Icon(
-                              Icons.star_rounded,
-                              size: 32,
-                            ),
-                            // TODO change colour of icon to gold upon completion of lesson
-                            iconColor: const Color(0xff4F4F4F),
-                            title: Text(_convertIdToTitle(document.id)),
-                            onTap: () async {
-                              await Navigator.pushNamed(context, '/lesson',
-                                  arguments: document);
-                            },
-                          ));
-                    }).toList(),
-                  ),
-                ),
-              ),
+                        child: ListTile(
+                            title: Text(lessonTitle),
+                            trailing: const Icon(Icons.check),
+                            onTap: () => Navigator.pushNamed(
+                                  context,
+                                  '/lesson',
+                                  arguments: lesson,
+                                )),
+                      );
+                    },
+                  );
+                } else if (snapshot2.hasError) {
+                  return const Center(child: Text('Something went wrong!'));
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
             );
-          } else if (snapshot.hasError) {
+          } else if (snapshot1.hasError) {
             return const Center(child: Text('Something went wrong!'));
           } else {
             return const Center(child: CircularProgressIndicator());

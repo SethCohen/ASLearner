@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Flashcard extends StatefulWidget {
@@ -7,9 +8,12 @@ class Flashcard extends StatefulWidget {
     super.key,
     required this.handleCardIndex,
     required this.data,
+    required this.handleCard,
   });
+
+  final Function(DocumentSnapshot, int) handleCard;
   final Function() handleCardIndex;
-  final Map<String, dynamic> data;
+  final QueryDocumentSnapshot data;
 
   @override
   State<Flashcard> createState() => _FlashcardState();
@@ -20,6 +24,8 @@ class _FlashcardState extends State<Flashcard> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> data = widget.data.data() as Map<String, dynamic>;
+
     return Card(
       color: const Color(0XFF121212),
       child: Column(
@@ -36,7 +42,7 @@ class _FlashcardState extends State<Flashcard> {
             child: ImageFiltered(
                 enabled: _isBlurred,
                 imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-                child: Image.network(widget.data['assetUrl'])),
+                child: Image.network(data['assetUrl'])),
           ),
           // TODO add media control buttons: stop, prev frame, play/pause, next frame, playback speed
           // TODO add instructional body text
@@ -45,7 +51,6 @@ class _FlashcardState extends State<Flashcard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // TODO implement spaced-repetition algorithm
                   TextButton(
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.redAccent,
@@ -54,6 +59,7 @@ class _FlashcardState extends State<Flashcard> {
                     onPressed: () {
                       setState(() {
                         widget.handleCardIndex();
+                        widget.handleCard(widget.data, 0);
                       });
                     },
                     child: const Text('Hard'),
@@ -66,6 +72,7 @@ class _FlashcardState extends State<Flashcard> {
                     onPressed: () {
                       setState(() {
                         widget.handleCardIndex();
+                        widget.handleCard(widget.data, 2);
                       });
                     },
                     child: const Text('Medium'),
@@ -78,6 +85,7 @@ class _FlashcardState extends State<Flashcard> {
                     onPressed: () {
                       setState(() {
                         widget.handleCardIndex();
+                        widget.handleCard(widget.data, 5);
                       });
                     },
                     child: const Text('Easy'),
