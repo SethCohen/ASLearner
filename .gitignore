@@ -47,4 +47,5 @@ firebase_app_id_file.json
 firebase_options.dart
 google-services.json
 GoogleService-Info.plist
-.vscode/launch.json
+.vscode/*
+src/lib/tests/*
