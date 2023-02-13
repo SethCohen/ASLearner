@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:asl/pages/home_page.dart';
 import 'package:asl/pages/landing_page.dart';
@@ -11,14 +12,43 @@ class PageManager extends StatelessWidget {
       body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            bool isSignedIn = false;
+            if (snapshot.hasData) {
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .get()
+                  .then(
+                (value) {
+                  if (!value.exists) {
+                    FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .set({
+                      "lastLogin": DateTime.now(),
+                      "streak": 0,
+                    });
+                  } else {
+                    if (DateTime.now()
+                            .difference(value.data()!["lastLogin"].toDate())
+                            .inDays >
+                        1) {
+                      FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update({
+                        "lastLogin": DateTime.now(),
+                        "streak": value.data()!["streak"] + 1,
+                      });
+                    }
+                  }
+                },
+              );
 
-            if (snapshot.connectionState == ConnectionState.active) {
-              isSignedIn = snapshot.hasData;
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const HomePage();
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Something went wrong!'));
+            } else {
+              return const LandingPage();
             }
-
-            return isSignedIn ? const HomePage() : const LandingPage();
           }));
 }
