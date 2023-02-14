@@ -48,6 +48,9 @@ class _FlashcardState extends State<Flashcard> {
           // TODO add instructional body text
           Visibility(
               visible: !_isBlurred,
+              // TODO differentiate between a Lesson Flashcard and a Review Flashcard,
+              // and only show the difficulty buttons on a Review Flashcard.
+              // A Lesson Flashcard should only have a "Next" button.
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

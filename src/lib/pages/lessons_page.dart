@@ -45,6 +45,9 @@ class _LessonsPageState extends State<LessonsPage> {
                             .set({"complete": false});
                       }
 
+                      // TODO if lesson is complete, change trailing icon color to green
+                      // TODO is lesson is in progress, change trailing icon color to yellow
+                      // TODO if lesson is not complete, change trailing icon color to red
                       return Card(
                         child: ListTile(
                             title: Text(lessonTitle),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:asl/widgets/page_manager.dart';
 import 'package:asl/providers/google_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:url_strategy/url_strategy.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setPathUrlStrategy();
   runApp(const MyApp());
 }
 

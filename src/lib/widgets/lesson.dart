@@ -39,6 +39,9 @@ class _LessonState extends State<Lesson> {
                 final cards = snapshot.data!.docs;
                 _cardsLength = cards.length;
 
+                // TODO display total amount of cards left to review
+                // TODO display progress bar
+
                 return IndexedStack(
                   index: _currentCardIndex,
                   children: cards.map((card) {
