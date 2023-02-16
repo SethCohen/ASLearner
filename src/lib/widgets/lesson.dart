@@ -53,6 +53,9 @@ class _LessonState extends State<Lesson> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    LinearProgressIndicator(
+                      value: _currentCardIndex / _cardsLength,
+                    ),
                     IndexedStack(
                         index: _currentCardIndex,
                         children: cards.map((card) {
@@ -63,7 +66,6 @@ class _LessonState extends State<Lesson> {
                             isReview: isReview,
                           );
                         }).toList()),
-                    // TODO display progress bar
                   ],
                 );
               } else if (snapshot.hasError) {
