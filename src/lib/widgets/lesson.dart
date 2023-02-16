@@ -17,8 +17,11 @@ class _LessonState extends State<Lesson> {
 
   @override
   Widget build(BuildContext context) {
-    final lesson =
-        ModalRoute.of(context)!.settings.arguments as QueryDocumentSnapshot;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    final lesson = arguments['lesson'] as QueryDocumentSnapshot;
+    final isReview = arguments['isReview'] as bool;
 
     return Scaffold(
         appBar: AppBar(
@@ -49,6 +52,7 @@ class _LessonState extends State<Lesson> {
                       data: card,
                       handleCard: _updateCardInProgressCollection,
                       handleCardIndex: _incrementCardIndex,
+                      isReview: isReview,
                     );
                   }).toList(),
                 );

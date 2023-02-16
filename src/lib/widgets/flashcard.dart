@@ -9,11 +9,13 @@ class Flashcard extends StatefulWidget {
     required this.handleCardIndex,
     required this.data,
     required this.handleCard,
+    required this.isReview,
   });
 
   final Function(DocumentSnapshot, int) handleCard;
   final Function() handleCardIndex;
   final QueryDocumentSnapshot data;
+  final bool isReview;
 
   @override
   State<Flashcard> createState() => _FlashcardState();
@@ -48,53 +50,65 @@ class _FlashcardState extends State<Flashcard> {
           // TODO add instructional body text
           Visibility(
               visible: !_isBlurred,
-              // TODO differentiate between a Lesson Flashcard and a Review Flashcard,
-              // and only show the difficulty buttons on a Review Flashcard.
-              // A Lesson Flashcard should only have a "Next" button.
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.redAccent,
-                      textStyle: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        widget.handleCardIndex();
-                        widget.handleCard(widget.data, 0);
-                      });
-                    },
-                    child: const Text('Hard'),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.blueAccent,
-                      textStyle: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        widget.handleCardIndex();
-                        widget.handleCard(widget.data, 2);
-                      });
-                    },
-                    child: const Text('Medium'),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.greenAccent,
-                      textStyle: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        widget.handleCardIndex();
-                        widget.handleCard(widget.data, 5);
-                      });
-                    },
-                    child: const Text('Easy'),
-                  ),
-                ],
-              )),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: widget.isReview
+                      ? [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.redAccent,
+                              textStyle:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                widget.handleCardIndex();
+                                widget.handleCard(widget.data, 0);
+                              });
+                            },
+                            child: const Text('Hard'),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.blueAccent,
+                              textStyle:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                widget.handleCardIndex();
+                                widget.handleCard(widget.data, 2);
+                              });
+                            },
+                            child: const Text('Medium'),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.greenAccent,
+                              textStyle:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                widget.handleCardIndex();
+                                widget.handleCard(widget.data, 5);
+                              });
+                            },
+                            child: const Text('Easy'),
+                          ),
+                        ]
+                      : [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            onPressed: () {
+                              widget.handleCardIndex();
+                            },
+                            child: const Text('Next'),
+                          ),
+                        ])),
           Visibility(
             visible: _isBlurred,
             child: TextButton(

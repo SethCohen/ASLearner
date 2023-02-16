@@ -55,7 +55,10 @@ class _LessonsPageState extends State<LessonsPage> {
                             onTap: () => Navigator.pushNamed(
                                   context,
                                   '/lesson',
-                                  arguments: lesson,
+                                  arguments: {
+                                    'lesson': lesson,
+                                    'isReview': false,
+                                  },
                                 )),
                       );
                     },
