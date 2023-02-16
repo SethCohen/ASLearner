@@ -83,7 +83,27 @@ class _LessonState extends State<Lesson> {
   void _incrementCardIndex() {
     setState(() {
       if (_currentCardIndex == _cardsLength - 1) {
-        // TODO mark lesson as complete in database
+        final user = FirebaseAuth.instance.currentUser!;
+        final arguments = (ModalRoute.of(context)?.settings.arguments ??
+            <String, dynamic>{}) as Map;
+        final currentLesson = arguments['lesson'] as QueryDocumentSnapshot;
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('progress')
+            .doc(currentLesson.id)
+            .get()
+            .then((value) {
+          if (!value.data()!['complete']) {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .collection('progress')
+                .doc(currentLesson.id)
+                .update({'complete': true});
+          }
+        });
+
         Navigator.pop(context);
       } else {
         _currentCardIndex++;
