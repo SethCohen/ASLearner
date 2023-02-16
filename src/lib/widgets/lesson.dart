@@ -42,19 +42,29 @@ class _LessonState extends State<Lesson> {
                 final cards = snapshot.data!.docs;
                 _cardsLength = cards.length;
 
-                // TODO display total amount of cards left to review
-                // TODO display progress bar
-
-                return IndexedStack(
-                  index: _currentCardIndex,
-                  children: cards.map((card) {
-                    return Flashcard(
-                      data: card,
-                      handleCard: _updateCardInProgressCollection,
-                      handleCardIndex: _incrementCardIndex,
-                      isReview: isReview,
-                    );
-                  }).toList(),
+                return Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Text(
+                      'Card ${_currentCardIndex + 1} of $_cardsLength',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    IndexedStack(
+                        index: _currentCardIndex,
+                        children: cards.map((card) {
+                          return Flashcard(
+                            data: card,
+                            handleCard: _updateCardInProgressCollection,
+                            handleCardIndex: _incrementCardIndex,
+                            isReview: isReview,
+                          );
+                        }).toList()),
+                    // TODO display progress bar
+                  ],
                 );
               } else if (snapshot.hasError) {
                 return const Center(child: Text('Something went wrong!'));
