@@ -69,9 +69,13 @@ class _LessonState extends State<Lesson> {
                   ],
                 );
               } else if (snapshot.hasError) {
-                return const Center(child: Text('Something went wrong!'));
+                return const Center(
+                  child: Text('Something went wrong!'),
+                );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
             }));
   }

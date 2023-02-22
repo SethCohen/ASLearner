@@ -33,11 +33,9 @@ class _FlashcardState extends State<Flashcard> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            title: Text(
-              widget.data['title'],
-              style: const TextStyle(fontSize: 20),
-            ),
+          Text(
+            widget.data['title'],
+            style: const TextStyle(fontSize: 20),
           ),
           // TODO replace network images with controllable video player
           ClipRRect(
@@ -48,81 +46,76 @@ class _FlashcardState extends State<Flashcard> {
           ),
           // TODO add media control buttons: stop, prev frame, play/pause, next frame, playback speed
           // TODO add instructional body text
-          Visibility(
-              visible: !_isBlurred,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: widget.isReview
-                      ? [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.redAccent,
-                              textStyle:
-                                  const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                widget.handleCardIndex();
-                                widget.handleCard(widget.data, 0);
-                              });
-                            },
-                            child: const Text('Hard'),
+          _isBlurred
+              ? widget.isReview
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.redAccent,
+                            textStyle:
+                                const TextStyle(fontWeight: FontWeight.w500),
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.blueAccent,
-                              textStyle:
-                                  const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                widget.handleCardIndex();
-                                widget.handleCard(widget.data, 2);
-                              });
-                            },
-                            child: const Text('Medium'),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.greenAccent,
-                              textStyle:
-                                  const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                widget.handleCardIndex();
-                                widget.handleCard(widget.data, 5);
-                              });
-                            },
-                            child: const Text('Easy'),
-                          ),
-                        ]
-                      : [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor:
-                                  Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            onPressed: () {
+                          onPressed: () {
+                            setState(() {
                               widget.handleCardIndex();
-                            },
-                            child: const Text('Next'),
+                              widget.handleCard(widget.data, 0);
+                            });
+                          },
+                          child: const Text('Hard'),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.blueAccent,
+                            textStyle:
+                                const TextStyle(fontWeight: FontWeight.w500),
                           ),
-                        ])),
-          Visibility(
-            visible: _isBlurred,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-              onPressed: () {
-                setState(() {
-                  _isBlurred = !_isBlurred;
-                });
-              },
-              child: const Text('Reveal'),
-            ),
-          )
+                          onPressed: () {
+                            setState(() {
+                              widget.handleCardIndex();
+                              widget.handleCard(widget.data, 2);
+                            });
+                          },
+                          child: const Text('Medium'),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.greenAccent,
+                            textStyle:
+                                const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              widget.handleCardIndex();
+                              widget.handleCard(widget.data, 5);
+                            });
+                          },
+                          child: const Text('Easy'),
+                        ),
+                      ],
+                    )
+                  : TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isBlurred = !_isBlurred;
+                        });
+                      },
+                      child: const Text('Reveal'),
+                    )
+              : TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  onPressed: () {
+                    widget.handleCardIndex();
+                  },
+                  child: const Text('Next'),
+                ),
         ],
       ),
     );
