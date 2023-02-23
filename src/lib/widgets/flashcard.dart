@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 class Flashcard extends StatefulWidget {
   const Flashcard({
     super.key,
-    required this.handleCardIndex,
     required this.data,
-    required this.handleCard,
+    required this.handleCardIndex,
+    required this.handleCardProgress,
     required this.isReview,
   });
 
-  final Function(DocumentSnapshot, int) handleCard;
+  final Function(DocumentSnapshot, int) handleCardProgress;
   final Function() handleCardIndex;
   final QueryDocumentSnapshot data;
   final bool isReview;
@@ -60,7 +60,7 @@ class _FlashcardState extends State<Flashcard> {
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
-                              widget.handleCard(widget.data, 0);
+                              widget.handleCardProgress(widget.data, 0);
                             });
                           },
                           child: const Text('Hard'),
@@ -74,7 +74,7 @@ class _FlashcardState extends State<Flashcard> {
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
-                              widget.handleCard(widget.data, 2);
+                              widget.handleCardProgress(widget.data, 2);
                             });
                           },
                           child: const Text('Medium'),
@@ -88,7 +88,7 @@ class _FlashcardState extends State<Flashcard> {
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
-                              widget.handleCard(widget.data, 5);
+                              widget.handleCardProgress(widget.data, 5);
                             });
                           },
                           child: const Text('Easy'),
@@ -113,6 +113,7 @@ class _FlashcardState extends State<Flashcard> {
                   ),
                   onPressed: () {
                     widget.handleCardIndex();
+                    widget.handleCardProgress(widget.data, 0);
                   },
                   child: const Text('Next'),
                 ),

@@ -12,37 +12,21 @@ class Lesson extends StatefulWidget {
 }
 
 class _LessonState extends State<Lesson> {
+  final _user = FirebaseAuth.instance.currentUser!;
+
   int _currentCardIndex = 0;
   int _cardsLength = 0;
+  String _lessonId = '';
 
   @override
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-
     final lesson = arguments['lesson'] as QueryDocumentSnapshot;
 
     return WillPopScope(
       onWillPop: () async {
-        final user = FirebaseAuth.instance.currentUser!;
-        final currentLesson = arguments['lesson'] as QueryDocumentSnapshot;
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .collection('progress')
-            .doc(currentLesson.id)
-            .get()
-            .then((value) {
-          if (!value.data()!['inProgress']) {
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.uid)
-                .collection('progress')
-                .doc(currentLesson.id)
-                .update({'inProgress': true});
-          }
-        });
-
+        _handleInProgress(lesson);
         return true;
       },
       child: Scaffold(
@@ -61,6 +45,8 @@ class _LessonState extends State<Lesson> {
               stream: lesson.reference.collection('cards').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  _lessonId = lesson.id;
+
                   final cards = snapshot.data!.docs;
                   _cardsLength = cards.length;
 
@@ -83,8 +69,8 @@ class _LessonState extends State<Lesson> {
                           children: cards.map((card) {
                             return Flashcard(
                               data: card,
-                              handleCard: _updateCardInProgressCollection,
-                              handleCardIndex: _incrementCardIndex,
+                              handleCardProgress: _handleCardProgress,
+                              handleCardIndex: _handleCardIndex,
                               isReview: false,
                             );
                           }).toList()),
@@ -107,30 +93,58 @@ class _LessonState extends State<Lesson> {
     return input.replaceAll('lesson', 'Lesson ');
   }
 
-  void _incrementCardIndex() {
+  void _handleCardProgress(DocumentSnapshot currentCard, int quality) {
+    final sm = Sm();
+    debugPrint('test');
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(_user.uid)
+        .collection('progress')
+        .doc(_lessonId)
+        .collection('cards')
+        .doc(currentCard.id)
+        .get()
+        .then(
+      (card) {
+        SmResponse calculateCardProgress() {
+          if (!card.exists) {
+            return sm.calc(
+              quality: quality,
+              previousEaseFactor: 2.5,
+              previousInterval: 0,
+              repetitions: 0,
+            );
+          } else {
+            return sm.calc(
+              quality: quality,
+              previousEaseFactor: card.data()!['easeFactor'],
+              previousInterval: card.data()!['interval'],
+              repetitions: card.data()!['repetitions'],
+            );
+          }
+        }
+
+        SmResponse progress = calculateCardProgress();
+        final lastReview = DateTime.now();
+        final nextReview = lastReview.add(Duration(days: progress.interval));
+
+        card.reference.set({
+          'lastReview': lastReview,
+          'nextReview': nextReview,
+          'easeFactor': progress.easeFactor,
+          'interval': progress.interval,
+          'quality': quality,
+          'repetitions': progress.repetitions,
+        });
+      },
+    );
+  }
+
+  void _handleCardIndex() {
     setState(() {
       if (_currentCardIndex == _cardsLength - 1) {
-        final user = FirebaseAuth.instance.currentUser!;
-        final arguments = (ModalRoute.of(context)?.settings.arguments ??
-            <String, dynamic>{}) as Map;
-        final currentLesson = arguments['lesson'] as QueryDocumentSnapshot;
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .collection('progress')
-            .doc(currentLesson.id)
-            .get()
-            .then((value) {
-          if (!value.data()!['complete']) {
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.uid)
-                .collection('progress')
-                .doc(currentLesson.id)
-                .update({'complete': true});
-          }
-        });
-
+        _handleComplete();
         Navigator.pop(context);
       } else {
         _currentCardIndex++;
@@ -138,80 +152,44 @@ class _LessonState extends State<Lesson> {
     });
   }
 
-  void _updateCardInProgressCollection(
-    DocumentSnapshot card,
-    int quality,
-  ) {
-    final user = FirebaseAuth.instance.currentUser!;
-    final currentLesson =
-        ModalRoute.of(context)!.settings.arguments as QueryDocumentSnapshot;
-    final currentCard = card;
-
+  void _handleInProgress(QueryDocumentSnapshot currentLesson) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(user.uid)
+        .doc(_user.uid)
         .collection('progress')
         .doc(currentLesson.id)
-        .collection('cards')
-        .doc(currentCard.id)
         .get()
-        .then((value) {
-      final sm = Sm();
+        .then(
+      (lessonProgress) {
+        bool isNotInProgress = !lessonProgress.data()!['inProgress'];
+        if (isNotInProgress) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(_user.uid)
+              .collection('progress')
+              .doc(currentLesson.id)
+              .update({'inProgress': true});
+        }
+      },
+    );
+  }
 
-      if (!value.exists) {
-        final SmResponse sm2Response = sm.calc(
-          quality: quality,
-          previousEaseFactor: 2.5,
-          previousInterval: 0,
-          repetitions: 0,
-        );
-
-        final lastReviewed = DateTime.now();
-        final nextReview =
-            lastReviewed.add(Duration(days: sm2Response.interval));
-
+  void _handleComplete() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(_user.uid)
+        .collection('progress')
+        .doc(_lessonId)
+        .get()
+        .then((lessonProgress) {
+      bool isNotComplete = !lessonProgress.data()!['complete'];
+      if (isNotComplete) {
         FirebaseFirestore.instance
             .collection('users')
-            .doc(user.uid)
+            .doc(_user.uid)
             .collection('progress')
-            .doc(currentLesson.id)
-            .collection('cards')
-            .doc(currentCard.id)
-            .set({
-          'lastReviewed': lastReviewed,
-          'nextReview': nextReview,
-          'previousEaseFactor': sm2Response.easeFactor,
-          'previousInterval': sm2Response.interval,
-          'quality': quality,
-          'repetitions': sm2Response.repetitions,
-        });
-      } else {
-        final SmResponse sm2Response = sm.calc(
-          quality: quality,
-          previousEaseFactor: value.data()!['previousEaseFactor'],
-          previousInterval: value.data()!['previousInterval'],
-          repetitions: value.data()!['repetitions'],
-        );
-
-        final lastReviewed = DateTime.now();
-        final nextReview =
-            lastReviewed.add(Duration(days: sm2Response.interval));
-
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .collection('progress')
-            .doc(currentLesson.id)
-            .collection('cards')
-            .doc(currentCard.id)
-            .update({
-          'lastReviewed': lastReviewed,
-          'nextReview': nextReview,
-          'previousEaseFactor': sm2Response.easeFactor,
-          'previousInterval': sm2Response.interval,
-          'quality': quality,
-          'repetitions': sm2Response.repetitions,
-        });
+            .doc(_lessonId)
+            .update({'complete': true});
       }
     });
   }
