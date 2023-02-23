@@ -21,63 +21,86 @@ class _LessonState extends State<Lesson> {
         <String, dynamic>{}) as Map;
 
     final lesson = arguments['lesson'] as QueryDocumentSnapshot;
-    final isReview = arguments['isReview'] as bool;
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(_convertIdToTitle(lesson.id)),
-          toolbarHeight: 80,
-          backgroundColor: const Color(0XFF292929),
-          titleTextStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.w500,
+    return WillPopScope(
+      onWillPop: () async {
+        final user = FirebaseAuth.instance.currentUser!;
+        final currentLesson = arguments['lesson'] as QueryDocumentSnapshot;
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('progress')
+            .doc(currentLesson.id)
+            .get()
+            .then((value) {
+          if (!value.data()!['inProgress']) {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .collection('progress')
+                .doc(currentLesson.id)
+                .update({'inProgress': true});
+          }
+        });
+
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(_convertIdToTitle(lesson.id)),
+            toolbarHeight: 80,
+            backgroundColor: const Color(0XFF292929),
+            titleTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.w500,
+            ),
+            elevation: 10,
           ),
-          elevation: 10,
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-            stream: lesson.reference.collection('cards').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final cards = snapshot.data!.docs;
-                _cardsLength = cards.length;
+          body: StreamBuilder<QuerySnapshot>(
+              stream: lesson.reference.collection('cards').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final cards = snapshot.data!.docs;
+                  _cardsLength = cards.length;
 
-                return Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Text(
-                      'Card ${_currentCardIndex + 1} of $_cardsLength',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                  return Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Text(
+                        'Card ${_currentCardIndex + 1} of $_cardsLength',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    LinearProgressIndicator(
-                      value: _currentCardIndex / _cardsLength,
-                    ),
-                    IndexedStack(
-                        index: _currentCardIndex,
-                        children: cards.map((card) {
-                          return Flashcard(
-                            data: card,
-                            handleCard: _updateCardInProgressCollection,
-                            handleCardIndex: _incrementCardIndex,
-                            isReview: isReview,
-                          );
-                        }).toList()),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Something went wrong!'),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }));
+                      const SizedBox(height: 20),
+                      LinearProgressIndicator(
+                        value: _currentCardIndex / _cardsLength,
+                      ),
+                      IndexedStack(
+                          index: _currentCardIndex,
+                          children: cards.map((card) {
+                            return Flashcard(
+                              data: card,
+                              handleCard: _updateCardInProgressCollection,
+                              handleCardIndex: _incrementCardIndex,
+                              isReview: false,
+                            );
+                          }).toList()),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Something went wrong!'),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              })),
+    );
   }
 
   String _convertIdToTitle(String input) {

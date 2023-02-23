@@ -27,54 +27,33 @@ class _LessonsPageState extends State<LessonsPage> {
                     .snapshots(),
                 builder: (context, snapshot2) {
                   if (snapshot2.hasData) {
-                    final lessons = snapshot1.data!.docs;
-                    final progress = snapshot2.data!.docs;
-
-                    final progressCompletion = progress.map((element) {
-                      final data = element.data() as Map<String, dynamic>;
-                      return {
-                        'id': element.id,
-                        'complete': data['complete'],
-                      };
-                    }).toList();
+                    final lessonsCollection = snapshot1.data!.docs;
+                    final progressCollection = snapshot2.data!.docs;
 
                     return SizedBox(
                       width: MediaQuery.of(context).size.width * 0.33,
                       child: ListView.builder(
-                        itemCount: lessons.length,
+                        itemCount: lessonsCollection.length,
                         itemBuilder: (context, index) {
-                          final lesson = lessons[index];
-                          final lessonId = lesson.id;
-                          final lessonTitle = _convertIdToTitle(lessonId);
+                          final lesson = lessonsCollection[index];
+                          final lessonTitle = _convertIdToTitle(lesson.id);
 
-                          if (!progress
-                              .any((element) => element.id == lessonId)) {
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(user.uid)
-                                .collection("progress")
-                                .doc(lessonId)
-                                .set({"complete": false});
-                          }
+                          final lessonProgress =
+                              _getLessonProgress(progressCollection, lesson);
 
-                          // TODO is lesson is in progress, change trailing icon color to yellow
+                          final iconColour =
+                              _lessonColour(lessonProgress, lesson.id);
+
                           return Card(
                             child: ListTile(
                                 title: Text(lessonTitle),
-                                trailing: progressCompletion.firstWhere(
-                                        (element) =>
-                                            element['id'] ==
-                                            lessonId)['complete']
-                                    ? const Icon(Icons.check_circle_outline,
-                                        color: Colors.green)
-                                    : const Icon(Icons.check_circle_outline,
-                                        color: Colors.red),
+                                trailing: Icon(Icons.check_circle_outline,
+                                    color: iconColour),
                                 onTap: () => Navigator.pushNamed(
                                       context,
                                       '/lesson',
                                       arguments: {
                                         'lesson': lesson,
-                                        'isReview': false,
                                       },
                                     )),
                           );
@@ -99,5 +78,54 @@ class _LessonsPageState extends State<LessonsPage> {
 
   String _convertIdToTitle(String input) {
     return input.replaceAll('lesson', 'Lesson ');
+  }
+
+  List<Map<String, dynamic>> _getLessonProgress(
+    List<QueryDocumentSnapshot> progressCollection,
+    QueryDocumentSnapshot lesson,
+  ) {
+    _initializeLessonProgress(progressCollection, lesson);
+
+    return progressCollection.map((lessonProgress) {
+      final data = lessonProgress.data() as Map<String, dynamic>;
+      return {
+        'id': lessonProgress.id,
+        'complete': data['complete'],
+        'inProgress': data['inProgress'],
+      };
+    }).toList();
+  }
+
+  void _initializeLessonProgress(
+    List<QueryDocumentSnapshot> progressCollection,
+    QueryDocumentSnapshot lesson,
+  ) {
+    bool lessonDoesntExist = !progressCollection
+        .any((lessonProgress) => lessonProgress.id == lesson.id);
+
+    if (lessonDoesntExist) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .collection("progress")
+          .doc(lesson.id)
+          .set({"complete": false, "inProgress": false},
+              SetOptions(merge: true));
+    }
+  }
+
+  Color _lessonColour(
+    List<Map<String, dynamic>> currentLessonProgress,
+    String lessonId,
+  ) {
+    return currentLessonProgress
+            .where((element) => element['id'] == lessonId)
+            .first['complete']
+        ? Colors.green
+        : currentLessonProgress
+                .where((element) => element['id'] == lessonId)
+                .first['inProgress']
+            ? Colors.orange
+            : Colors.red;
   }
 }
