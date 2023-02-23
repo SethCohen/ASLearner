@@ -9,46 +9,68 @@ class PageManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      body: StreamBuilder(
+        body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .get()
-                  .then(
-                (value) {
-                  if (!value.exists) {
-                    FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .set({
-                      "lastLogin": DateTime.now(),
-                      "streak": 0,
-                    });
-                  } else {
-                    if (DateTime.now()
-                            .difference(value.data()!["lastLogin"].toDate())
-                            .inDays >
-                        1) {
-                      FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .update({
-                        "lastLogin": DateTime.now(),
-                        "streak": value.data()!["streak"] + 1,
-                      });
-                    }
-                  }
-                },
-              );
-
+              _manageUser();
               return const HomePage();
             } else if (snapshot.hasError) {
               return const Center(child: Text('Something went wrong!'));
             } else {
               return const LandingPage();
             }
-          }));
+          },
+        ),
+      );
+
+  void _manageUser() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+      (user) {
+        if (!user.exists) {
+          _createUser();
+        } else {
+          _updateUser(user);
+        }
+      },
+    );
+  }
+
+  void _createUser() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({
+      "lastLogin": DateTime.now(),
+      "streak": 0,
+    });
+  }
+
+  void _updateUser(DocumentSnapshot user) {
+    // If user has logged in between 12:00am the next day to the following day, streak increments.
+    if (DateTime.now().difference(user["lastLogin"].toDate()).inDays == 0) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        "lastLogin": DateTime.now(),
+        "streak": user["streak"] + 1,
+      });
+    }
+
+    // If user has logged in more than 2 days since last login, streak resets.
+    if (DateTime.now().difference(user["lastLogin"].toDate()).inDays > 1) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        "lastLogin": DateTime.now(),
+        "streak": 0,
+      });
+    }
+  }
 }

@@ -22,8 +22,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => GoogleSignInProvider(),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => GoogleSignInProvider()),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'ASL Learner',
