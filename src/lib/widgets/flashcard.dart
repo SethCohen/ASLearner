@@ -161,6 +161,9 @@ class _FlashcardState extends State<Flashcard> {
         final nextReview = lastReview.add(Duration(days: progress.interval));
 
         card.reference.set({
+          'assetUrl': widget.cardData['assetUrl'],
+          'title': widget.cardData['title'],
+          'instructions': widget.cardData['instructions'],
           'lastReview': lastReview,
           'nextReview': nextReview,
           'easeFactor': progress.easeFactor,

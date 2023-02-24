@@ -53,7 +53,8 @@ class _LessonsPageState extends State<LessonsPage> {
                                       context,
                                       '/lesson',
                                       arguments: {
-                                        'lesson': lesson,
+                                        'lessonId': lesson.id,
+                                        'isReview': false,
                                       },
                                     )),
                           );

@@ -3,78 +3,133 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ReviewPage extends StatefulWidget {
-  const ReviewPage({super.key});
+  const ReviewPage({Key? key}) : super(key: key);
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  final user = FirebaseAuth.instance.currentUser!;
+  final _user = FirebaseAuth.instance.currentUser!;
+
+  Stream<List<Map<String, dynamic>>> _getCardsToReview() {
+    // TODO fix rebuild on stream change not working
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(_user.uid)
+        .collection("progress")
+        .snapshots()
+        .asyncMap(
+      (lessonsSnapshot) async {
+        final lessonCards = await Future.wait(
+          lessonsSnapshot.docs.map(
+            (lesson) {
+              final lessonId = lesson.id;
+              return lesson.reference
+                  .collection('cards')
+                  .where('nextReview', isLessThan: DateTime.now())
+                  .get()
+                  .then(
+                (cards) {
+                  return cards.docs.map(
+                    (card) {
+                      final cardId = card.id;
+                      final cardData = card.data();
+                      return {
+                        'lessonId': lessonId,
+                        'cardId': cardId,
+                        'cardData': cardData,
+                      };
+                    },
+                  ).toList();
+                },
+              );
+            },
+          ),
+        );
+
+        return lessonCards.expand((cards) => cards).toList();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO get all cards from user's in progress collection and allow the user to review over them either by lesson or by all cards
     return Center(
-      child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection("lessons").snapshots(),
-          builder: (context, snapshot1) {
-            if (snapshot1.hasData) {
-              return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(user.uid)
-                    .collection("progress")
-                    .snapshots(),
-                builder: (context, snapshot2) {
-                  if (snapshot2.hasData) {
-                    final lessons = snapshot1.data!.docs;
-                    final progress = snapshot2.data!.docs;
+      child: StreamBuilder(
+          stream: _getCardsToReview(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final cards = snapshot.data!;
 
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.33,
+              final foldedCards = cards.fold(
+                <String, List<Map<String, dynamic>>>{},
+                (previousValue, element) {
+                  final lessonId = element['lessonId'] as String;
+                  final card = {
+                    'cardId': element['cardId'] as String,
+                    'cardData': element['cardData'] as Map<String, dynamic>
+                  };
+
+                  if (previousValue.containsKey(lessonId)) {
+                    previousValue[lessonId]!.add(card);
+                  } else {
+                    previousValue[lessonId] = [card];
+                  }
+
+                  return previousValue;
+                },
+              );
+
+              if (foldedCards.isEmpty) {
+                return const Text('No cards to review');
+              }
+
+              return SizedBox(
+                width: MediaQuery.of(context).size.width * 0.33,
+                child: Column(
+                  children: [
+                    Card(
+                      child: ListTile(
+                        title: const Text('Review All'),
+                        trailing: Text(cards.length.toString()),
+                        onTap: () {
+                          // TODO review all cards implementation
+                        },
+                      ),
+                    ),
+                    Expanded(
                       child: ListView.builder(
-                        itemCount: lessons.length,
+                        itemCount: foldedCards.length,
                         itemBuilder: (context, index) {
-                          final lesson = lessons[index];
-                          final lessonId = lesson.id;
+                          final lessonId = foldedCards.keys.elementAt(index);
                           final lessonTitle = _convertIdToTitle(lessonId);
-
-                          if (!progress
-                              .any((element) => element.id == lessonId)) {
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(user.uid)
-                                .collection("progress")
-                                .doc(lessonId)
-                                .set({"complete": false});
-                          }
 
                           return Card(
                             child: ListTile(
                                 title: Text(lessonTitle),
-                                trailing: const Icon(Icons.check),
-                                onTap: () => Navigator.pushNamed(
-                                      context,
-                                      '/lesson',
-                                      arguments: {
-                                        'lesson': lesson,
-                                        'isReview': true,
-                                      },
-                                    )),
+                                trailing: Text(
+                                    foldedCards[lessonId]!.length.toString()),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/review',
+                                    arguments: {
+                                      'lessonId': lessonId,
+                                      'cards': foldedCards[lessonId]!,
+                                      'isReview': true,
+                                    },
+                                  );
+                                }),
                           );
                         },
                       ),
-                    );
-                  } else if (snapshot2.hasError) {
-                    return const Text('Something went wrong!');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
+                    ),
+                  ],
+                ),
               );
-            } else if (snapshot1.hasError) {
-              return const Text('Something went wrong!');
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
             } else {
               return const CircularProgressIndicator();
             }

@@ -21,16 +21,17 @@ class _LessonState extends State<Lesson> {
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-    final lesson = arguments['lesson'] as QueryDocumentSnapshot;
+    final lessonId = arguments['lessonId'] as String;
+    final isReview = arguments['isReview'] as bool;
 
     return WillPopScope(
       onWillPop: () async {
-        _handleInProgress(lesson);
+        _handleInProgress(lessonId);
         return true;
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(_convertIdToTitle(lesson.id)),
+            title: Text(_convertIdToTitle(lessonId)),
             toolbarHeight: 80,
             backgroundColor: const Color(0XFF292929),
             titleTextStyle: const TextStyle(
@@ -41,13 +42,16 @@ class _LessonState extends State<Lesson> {
             elevation: 10,
           ),
           body: StreamBuilder<QuerySnapshot>(
-              stream: lesson.reference.collection('cards').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection("lessons")
+                  .doc(lessonId)
+                  .collection('cards')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  _lessonId = lesson.id;
-
                   final cards = snapshot.data!.docs;
                   _cardsLength = cards.length;
+                  _lessonId = lessonId;
 
                   return Column(
                     children: [
@@ -70,11 +74,11 @@ class _LessonState extends State<Lesson> {
                                 card.data() as Map<String, dynamic>;
 
                             return Flashcard(
-                              lessonId: _lessonId,
+                              lessonId: lessonId,
                               cardId: card.id,
                               cardData: cardData,
                               handleCardIndex: _handleCardIndex,
-                              isReview: false,
+                              isReview: isReview,
                             );
                           }).toList()),
                     ],
@@ -107,12 +111,12 @@ class _LessonState extends State<Lesson> {
     });
   }
 
-  void _handleInProgress(QueryDocumentSnapshot currentLesson) {
+  void _handleInProgress(String lessonId) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(_user.uid)
         .collection('progress')
-        .doc(currentLesson.id)
+        .doc(lessonId)
         .get()
         .then(
       (lessonProgress) {
@@ -122,7 +126,7 @@ class _LessonState extends State<Lesson> {
               .collection('users')
               .doc(_user.uid)
               .collection('progress')
-              .doc(currentLesson.id)
+              .doc(lessonId)
               .update({'inProgress': true});
         }
       },

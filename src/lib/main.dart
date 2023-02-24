@@ -1,5 +1,6 @@
 import 'package:asl/pages/manage_page.dart';
 import 'package:asl/widgets/lesson.dart';
+import 'package:asl/widgets/review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:asl/widgets/page_manager.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           routes: <String, WidgetBuilder>{
             '/manageAccount': (BuildContext context) => const ManagePage(),
             '/lesson': (BuildContext context) => const Lesson(),
+            '/review': (BuildContext context) => const Review(),
           },
         ));
   }
