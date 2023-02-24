@@ -50,7 +50,18 @@ class _FlashcardState extends State<Flashcard> {
           // TODO add media control buttons: stop, prev frame, play/pause, next frame, playback speed
           // TODO add instructional body text
           _isBlurred
-              ? widget.isReview
+              ? TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isBlurred = !_isBlurred;
+                    });
+                  },
+                  child: const Text('Reveal'),
+                )
+              : widget.isReview
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -104,22 +115,11 @@ class _FlashcardState extends State<Flashcard> {
                             Theme.of(context).colorScheme.onPrimary,
                       ),
                       onPressed: () {
-                        setState(() {
-                          _isBlurred = !_isBlurred;
-                        });
+                        widget.handleCardIndex();
+                        _handleCardProgress(0);
                       },
-                      child: const Text('Reveal'),
+                      child: const Text('Next'),
                     )
-              : TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  onPressed: () {
-                    widget.handleCardIndex();
-                    _handleCardProgress(0);
-                  },
-                  child: const Text('Next'),
-                ),
         ],
       ),
     );
