@@ -1,20 +1,24 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:spaced_repetition/main.dart';
 
 class Flashcard extends StatefulWidget {
   const Flashcard({
     super.key,
-    required this.data,
     required this.handleCardIndex,
-    required this.handleCardProgress,
+    required this.lessonId,
+    required this.cardId,
+    required this.cardData,
     required this.isReview,
   });
 
-  final Function(DocumentSnapshot, int) handleCardProgress;
   final Function() handleCardIndex;
-  final QueryDocumentSnapshot data;
+  final String lessonId;
+  final String cardId;
+  final Map<String, dynamic> cardData;
   final bool isReview;
 
   @override
@@ -22,19 +26,18 @@ class Flashcard extends StatefulWidget {
 }
 
 class _FlashcardState extends State<Flashcard> {
+  final _user = FirebaseAuth.instance.currentUser!;
   bool _isBlurred = true;
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> data = widget.data.data() as Map<String, dynamic>;
-
     return Card(
       color: const Color(0XFF121212),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            widget.data['title'],
+            widget.cardData['title'],
             style: const TextStyle(fontSize: 20),
           ),
           // TODO replace network images with controllable video player
@@ -42,7 +45,7 @@ class _FlashcardState extends State<Flashcard> {
             child: ImageFiltered(
                 enabled: _isBlurred,
                 imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-                child: Image.network(data['assetUrl'])),
+                child: Image.network(widget.cardData['assetUrl'])),
           ),
           // TODO add media control buttons: stop, prev frame, play/pause, next frame, playback speed
           // TODO add instructional body text
@@ -60,7 +63,7 @@ class _FlashcardState extends State<Flashcard> {
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
-                              widget.handleCardProgress(widget.data, 0);
+                              _handleCardProgress(0);
                             });
                           },
                           child: const Text('Hard'),
@@ -74,7 +77,7 @@ class _FlashcardState extends State<Flashcard> {
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
-                              widget.handleCardProgress(widget.data, 2);
+                              _handleCardProgress(2);
                             });
                           },
                           child: const Text('Medium'),
@@ -88,7 +91,7 @@ class _FlashcardState extends State<Flashcard> {
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
-                              widget.handleCardProgress(widget.data, 5);
+                              _handleCardProgress(5);
                             });
                           },
                           child: const Text('Easy'),
@@ -113,12 +116,59 @@ class _FlashcardState extends State<Flashcard> {
                   ),
                   onPressed: () {
                     widget.handleCardIndex();
-                    widget.handleCardProgress(widget.data, 0);
+                    _handleCardProgress(0);
                   },
                   child: const Text('Next'),
                 ),
         ],
       ),
+    );
+  }
+
+  void _handleCardProgress(int quality) {
+    final sm = Sm();
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(_user.uid)
+        .collection('progress')
+        .doc(widget.lessonId)
+        .collection('cards')
+        .doc(widget.cardId)
+        .get()
+        .then(
+      (card) {
+        SmResponse calculateCardProgress() {
+          if (!card.exists) {
+            return sm.calc(
+              quality: quality,
+              previousEaseFactor: 2.5,
+              previousInterval: 0,
+              repetitions: 0,
+            );
+          } else {
+            return sm.calc(
+              quality: quality,
+              previousEaseFactor: card.data()!['easeFactor'],
+              previousInterval: card.data()!['interval'],
+              repetitions: card.data()!['repetitions'],
+            );
+          }
+        }
+
+        SmResponse progress = calculateCardProgress();
+        final lastReview = DateTime.now();
+        final nextReview = lastReview.add(Duration(days: progress.interval));
+
+        card.reference.set({
+          'lastReview': lastReview,
+          'nextReview': nextReview,
+          'easeFactor': progress.easeFactor,
+          'interval': progress.interval,
+          'quality': quality,
+          'repetitions': progress.repetitions,
+        });
+      },
     );
   }
 }

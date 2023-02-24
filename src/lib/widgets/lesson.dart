@@ -2,7 +2,6 @@ import 'package:asl/widgets/flashcard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:spaced_repetition/main.dart';
 
 class Lesson extends StatefulWidget {
   const Lesson({super.key});
@@ -67,9 +66,13 @@ class _LessonState extends State<Lesson> {
                       IndexedStack(
                           index: _currentCardIndex,
                           children: cards.map((card) {
+                            final cardData =
+                                card.data() as Map<String, dynamic>;
+
                             return Flashcard(
-                              data: card,
-                              handleCardProgress: _handleCardProgress,
+                              lessonId: _lessonId,
+                              cardId: card.id,
+                              cardData: cardData,
                               handleCardIndex: _handleCardIndex,
                               isReview: false,
                             );
@@ -91,54 +94,6 @@ class _LessonState extends State<Lesson> {
 
   String _convertIdToTitle(String input) {
     return input.replaceAll('lesson', 'Lesson ');
-  }
-
-  void _handleCardProgress(DocumentSnapshot currentCard, int quality) {
-    final sm = Sm();
-    debugPrint('test');
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(_user.uid)
-        .collection('progress')
-        .doc(_lessonId)
-        .collection('cards')
-        .doc(currentCard.id)
-        .get()
-        .then(
-      (card) {
-        SmResponse calculateCardProgress() {
-          if (!card.exists) {
-            return sm.calc(
-              quality: quality,
-              previousEaseFactor: 2.5,
-              previousInterval: 0,
-              repetitions: 0,
-            );
-          } else {
-            return sm.calc(
-              quality: quality,
-              previousEaseFactor: card.data()!['easeFactor'],
-              previousInterval: card.data()!['interval'],
-              repetitions: card.data()!['repetitions'],
-            );
-          }
-        }
-
-        SmResponse progress = calculateCardProgress();
-        final lastReview = DateTime.now();
-        final nextReview = lastReview.add(Duration(days: progress.interval));
-
-        card.reference.set({
-          'lastReview': lastReview,
-          'nextReview': nextReview,
-          'easeFactor': progress.easeFactor,
-          'interval': progress.interval,
-          'quality': quality,
-          'repetitions': progress.repetitions,
-        });
-      },
-    );
   }
 
   void _handleCardIndex() {
