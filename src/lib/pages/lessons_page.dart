@@ -47,8 +47,8 @@ class _LessonsPageState extends State<LessonsPage> {
                           return Card(
                             child: ListTile(
                                 title: Text(lessonTitle),
-                                trailing: Icon(Icons.check_circle_outline,
-                                    color: iconColour),
+                                trailing:
+                                    Icon(Icons.star_rounded, color: iconColour),
                                 onTap: () => Navigator.pushNamed(
                                       context,
                                       '/lesson',
@@ -126,6 +126,6 @@ class _LessonsPageState extends State<LessonsPage> {
                 .where((element) => element['id'] == lessonId)
                 .first['inProgress']
             ? Colors.orange
-            : Colors.red;
+            : Colors.black38;
   }
 }
