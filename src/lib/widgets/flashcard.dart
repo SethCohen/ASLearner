@@ -126,6 +126,8 @@ class _FlashcardState extends State<Flashcard> {
   }
 
   void _handleCardProgress(int quality) {
+    // TODO dont update card progress if is lesson AND not first time reviewing
+
     final sm = Sm();
 
     FirebaseFirestore.instance

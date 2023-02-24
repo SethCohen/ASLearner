@@ -51,6 +51,8 @@ class PageManager extends StatelessWidget {
   }
 
   void _updateUser(DocumentSnapshot user) {
+    // TODO only increment streak if user has reviewed cards on a new day
+
     // If user has logged in between 12:00am the next day to the following day, streak increments.
     if (DateTime.now().difference(user["lastLogin"].toDate()).inDays == 0) {
       FirebaseFirestore.instance
