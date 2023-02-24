@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.7.0](https://github.com/SethCohen/ASL/compare/v1.6.0...v1.7.0) (2023-02-24)
+
+
+### Features
+
+* added basic review system ([1e0fa8f](https://github.com/SethCohen/ASL/commit/1e0fa8f831d468124ba4b581fd97c8abde4c9071))
+* added card number indicator ([16e5c93](https://github.com/SethCohen/ASL/commit/16e5c939504f96ceb6881786ccc3873b2d578d12))
+* added diff  between lesson and review cards ([27a966d](https://github.com/SethCohen/ASL/commit/27a966d18aa7a132d6a62f4a5b900bfd5976e946))
+* added lesson progress indicator ([bff2d25](https://github.com/SethCohen/ASL/commit/bff2d25ba3beeac59ba18b4392b1787a6d200527))
+* added visual diff for (un)completed lesson ([e872ffc](https://github.com/SethCohen/ASL/commit/e872ffcb040bd25c24adfa4548e2b51beb5b5164))
+* added visual progress bar ([aa0bf7f](https://github.com/SethCohen/ASL/commit/aa0bf7f74929439d13d4529b5c2fbefda25635f4))
+
+
+### Bug Fixes
+
+* fixed flashcard blur ([b2fefc3](https://github.com/SethCohen/ASL/commit/b2fefc3c7e1e8b47c93d4fbb5ed119090309ba66))
+
+
+### Code Refactoring
+
+* moved handleCardProgress ([8638599](https://github.com/SethCohen/ASL/commit/8638599c45d0258355e3b370a033afd16952f730))
+* moved user streak handling to own method ([a08129b](https://github.com/SethCohen/ASL/commit/a08129b4fc7e75d9dacb284278bc308d8cf97a58))
+* refactored lesson code readability ([29b19ea](https://github.com/SethCohen/ASL/commit/29b19ea046371e2759edb91ae8a5aad81b65acd3))
+
+
+### Styles
+
+* changed flashcard width ([7eb90be](https://github.com/SethCohen/ASL/commit/7eb90be8d8eac9bc61fbefc2458aedf896973937))
+* changed lesson button width ([a020ffe](https://github.com/SethCohen/ASL/commit/a020ffe169006d1f3dd21f10eecc1a4ac2aa9126))
+* changed lesson icon and icon colour ([4956166](https://github.com/SethCohen/ASL/commit/49561669f2996f72e22d4af1f5b7c4d9d4cc5fd8))
+* changed review button width ([20f5725](https://github.com/SethCohen/ASL/commit/20f5725797ee418d29c78c4d0db094ed34f1b445))
+
+
+### Miscellaneous
+
+* added additional TODOs ([c0261ea](https://github.com/SethCohen/ASL/commit/c0261eaed969316157b57087fa9bba955d2fbef0))
+* updated Docker container ([cec81b2](https://github.com/SethCohen/ASL/commit/cec81b2a4d86987ff9d3adf09bf9d99b84f27f0b))
+
 ## [1.6.0](https://github.com/SethCohen/ASL/compare/v1.5.0...v1.6.0) (2023-02-13)
 
 
