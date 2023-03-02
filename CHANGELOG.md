@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/SethCohen/ASL/compare/v1.7.0...v1.7.1) (2023-03-02)
+
+
+### Miscellaneous
+
+* added more TODOs ([65b9a53](https://github.com/SethCohen/ASL/commit/65b9a53bf86dcd7b79bc67a7519862f8afdcfe89))
+
 ## [1.7.0](https://github.com/SethCohen/ASL/compare/v1.6.0...v1.7.0) (2023-02-24)
 
 
