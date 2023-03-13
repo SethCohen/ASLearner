@@ -94,7 +94,15 @@ class _ReviewPageState extends State<ReviewPage> {
                         title: const Text('Review All'),
                         trailing: Text(cards.length.toString()),
                         onTap: () {
-                          // TODO review all cards implementation
+                          Navigator.pushNamed(
+                            context,
+                            '/review',
+                            arguments: {
+                              'lessonId': 'All Cards',
+                              'cards': cards,
+                              'isReview': true,
+                            },
+                          );
                         },
                       ),
                     ),
