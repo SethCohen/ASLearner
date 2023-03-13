@@ -13,41 +13,33 @@ class ManagePage extends StatefulWidget {
 class _ManagePageState extends State<ManagePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manage Account'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(48.0, 8.0, 8.0, 8.0),
-        child: ListView(
-          children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white70,
-                alignment: Alignment.centerLeft,
-                textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onPressed: _signOut,
-              child: const Text(
-                'Sign Out',
-                textScaleFactor: 1.05,
-              ),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white70,
-                alignment: Alignment.centerLeft,
-                textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onPressed: _deleteAccount,
-              child: const Text(
-                'Delete Account',
-                textScaleFactor: 1.05,
-              ),
-            ),
-          ],
+    return ListView(
+      children: [
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white70,
+            alignment: Alignment.centerLeft,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          onPressed: _signOut,
+          child: const Text(
+            'Sign Out',
+            textScaleFactor: 1.05,
+          ),
         ),
-      ),
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white70,
+            alignment: Alignment.centerLeft,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          onPressed: _deleteAccount,
+          child: const Text(
+            'Delete Account',
+            textScaleFactor: 1.05,
+          ),
+        ),
+      ],
     );
   }
 
