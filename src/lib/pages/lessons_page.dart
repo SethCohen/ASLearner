@@ -48,8 +48,18 @@ class _LessonsPageState extends State<LessonsPage> {
                             color: const Color(0XFF425366),
                             child: ListTile(
                                 title: Text(lessonTitle),
-                                trailing:
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      lessonProgress[index]
+                                              ['lessonCardsRemaining']
+                                          .toString(),
+                                      style: TextStyle(color: iconColour),
+                                    ),
                                     Icon(Icons.check_circle, color: iconColour),
+                                  ],
+                                ),
                                 onTap: () => Navigator.pushNamed(
                                       context,
                                       '/lesson',
@@ -94,6 +104,7 @@ class _LessonsPageState extends State<LessonsPage> {
         'id': lessonProgress.id,
         'complete': data['complete'],
         'inProgress': data['inProgress'],
+        'lessonCardsRemaining': data['lessonCardsRemaining'],
       };
     }).toList();
   }
@@ -107,12 +118,28 @@ class _LessonsPageState extends State<LessonsPage> {
 
     if (lessonDoesntExist) {
       FirebaseFirestore.instance
-          .collection("users")
-          .doc(user.uid)
-          .collection("progress")
+          .collection("lessons")
           .doc(lesson.id)
-          .set({"complete": false, "inProgress": false},
-              SetOptions(merge: true));
+          .collection('cards')
+          .get()
+          .then(
+        (value) {
+          final lessonCardsRemaining = value.size;
+          FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.uid)
+              .collection("progress")
+              .doc(lesson.id)
+              .set(
+            {
+              "complete": false,
+              "inProgress": false,
+              "lessonCardsRemaining": lessonCardsRemaining
+            },
+            SetOptions(merge: true),
+          );
+        },
+      );
     }
   }
 

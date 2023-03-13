@@ -21,7 +21,6 @@ class _LessonState extends State<Lesson> {
   Widget build(BuildContext context) {
     // TODO add actual expression signs, not just alphabet | add more cards
     // TODO optional: quiz minigame at end of lesson or loop
-    // TODO percentage|cards remaining lesson completed
 
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
@@ -111,6 +110,12 @@ class _LessonState extends State<Lesson> {
         Navigator.pop(context);
       } else {
         _currentCardIndex++;
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(_user.uid)
+            .collection('progress')
+            .doc(_lessonId)
+            .update({'lessonCardsRemaining': FieldValue.increment(-1)});
       }
     });
   }
