@@ -49,7 +49,7 @@ class _LessonsPageState extends State<LessonsPage> {
                             child: ListTile(
                                 title: Text(lessonTitle),
                                 trailing:
-                                    Icon(Icons.star_rounded, color: iconColour),
+                                    Icon(Icons.check_circle, color: iconColour),
                                 onTap: () => Navigator.pushNamed(
                                       context,
                                       '/lesson',

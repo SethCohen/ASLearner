@@ -22,7 +22,6 @@ class _LessonState extends State<Lesson> {
     // TODO add actual expression signs, not just alphabet | add more cards
     // TODO optional: quiz minigame at end of lesson or loop
     // TODO percentage|cards remaining lesson completed
-    // TODO change icon CheckCircle
 
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
