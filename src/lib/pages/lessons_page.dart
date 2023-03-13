@@ -45,6 +45,7 @@ class _LessonsPageState extends State<LessonsPage> {
                               _lessonColour(lessonProgress, lesson.id);
 
                           return Card(
+                            color: const Color(0XFF425366),
                             child: ListTile(
                                 title: Text(lessonTitle),
                                 trailing:

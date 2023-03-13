@@ -90,6 +90,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 child: Column(
                   children: [
                     Card(
+                      color: const Color(0XFF425366),
                       child: ListTile(
                         title: const Text('Review All'),
                         trailing: Text(cards.length.toString()),
@@ -114,6 +115,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           final lessonTitle = _convertIdToTitle(lessonId);
 
                           return Card(
+                            color: const Color(0XFF425366),
                             child: ListTile(
                                 title: Text(lessonTitle),
                                 trailing: Text(

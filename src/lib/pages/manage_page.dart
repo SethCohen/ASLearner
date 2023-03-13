@@ -16,11 +16,6 @@ class _ManagePageState extends State<ManagePage> {
     return ListView(
       children: [
         TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.white70,
-            alignment: Alignment.centerLeft,
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
-          ),
           onPressed: _signOut,
           child: const Text(
             'Sign Out',
@@ -28,15 +23,9 @@ class _ManagePageState extends State<ManagePage> {
           ),
         ),
         TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.white70,
-            alignment: Alignment.centerLeft,
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
-          ),
           onPressed: _deleteAccount,
           child: const Text(
             'Delete Account',
-            textScaleFactor: 1.05,
           ),
         ),
       ],
@@ -54,8 +43,7 @@ class _ManagePageState extends State<ManagePage> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
               backgroundColor: Colors.grey.shade900,
-              title: const Text('Are You Sure?',
-                  style: TextStyle(color: Colors.white)),
+              title: const Text('Are You Sure?'),
               content: const Text(
                   'You\'re trying to delete your account.\nYour account and data will be deleted immediately. This action is not reversible.\nPlease hold YES to confirm.'),
               actions: <Widget>[
@@ -63,8 +51,7 @@ class _ManagePageState extends State<ManagePage> {
                   onPressed: () => Navigator.pop(context),
                   style:
                       const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                  child: const Text('Cancel',
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text('Cancel'),
                 ),
                 TextButton(
                   onLongPress: () {
@@ -83,8 +70,7 @@ class _ManagePageState extends State<ManagePage> {
                     Navigator.pop(context);
                   },
                   onPressed: () {},
-                  child:
-                      const Text('Yes', style: TextStyle(color: Colors.white)),
+                  child: const Text('Yes'),
                 ),
               ],
             ));

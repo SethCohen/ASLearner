@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:asl/pages/manage_page.dart';
 import 'package:asl/widgets/lesson.dart';
 import 'package:asl/widgets/review.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:json_theme/json_theme.dart';
+import 'package:json_theme/json_theme_schemas.dart';
 import 'package:provider/provider.dart';
 import 'package:asl/widgets/page_manager.dart';
 import 'package:asl/providers/google_provider.dart';
@@ -10,16 +15,26 @@ import 'package:url_strategy/url_strategy.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  SchemaValidator.enabled = false;
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   setPathUrlStrategy();
-  runApp(const MyApp());
+
+  final themeStr = await rootBundle.loadString('assets/themes/comfy.json');
+  final themeJson = jsonDecode(themeStr);
+  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+
+  runApp(MyApp(theme: theme));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.theme});
+
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +45,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'ASL Learner',
-          theme: ThemeData(
-            scaffoldBackgroundColor: const Color(0XFF292929),
-            brightness: Brightness.dark,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
+          theme: theme,
           home: const PageManager(),
           routes: <String, WidgetBuilder>{
             '/manageAccount': (BuildContext context) => const ManagePage(),

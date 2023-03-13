@@ -23,17 +23,7 @@ class _ReviewState extends State<Review> {
     _cardsLength = cards.length;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_convertIdToTitle(lessonId)),
-        toolbarHeight: 80,
-        backgroundColor: const Color(0XFF292929),
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 32,
-          fontWeight: FontWeight.w500,
-        ),
-        elevation: 10,
-      ),
+      appBar: AppBar(title: Text(_convertIdToTitle(lessonId))),
       body: Column(
         children: [
           const SizedBox(height: 20),

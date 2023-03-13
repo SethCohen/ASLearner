@@ -3,11 +3,9 @@ import 'package:asl/pages/dictionary_page.dart';
 import 'package:asl/pages/lessons_page.dart';
 import 'package:asl/pages/manage_page.dart';
 import 'package:asl/pages/review_page.dart';
-import 'package:asl/providers/google_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -36,20 +34,11 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: 80,
-            backgroundColor: const Color(0XFF292929),
             title: const Text('ASLearner'),
-            titleTextStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.w500,
-            ),
-            elevation: 10,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
             actions: <Widget>[
               TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
                 onPressed: () {
                   setState(() {
                     _selectedIndex = 0;
@@ -57,16 +46,9 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: const Text(
                   'Lessons',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
               ),
               TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
                 onPressed: () {
                   setState(() {
                     _selectedIndex = 2;
@@ -74,16 +56,9 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: const Text(
                   'Review',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
               ),
               TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
                 onPressed: () {
                   setState(() {
                     _selectedIndex = 1;
@@ -91,16 +66,9 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: const Text(
                   'Dictionary',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
               ),
               TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
                 onPressed: () {
                   setState(() {
                     _selectedIndex = 3;
@@ -108,10 +76,6 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: const Text(
                   'Creator',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
               ),
               IconButton(
