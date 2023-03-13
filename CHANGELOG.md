@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.8.0](https://github.com/SethCohen/ASL/compare/v1.7.1...v1.8.0) (2023-03-13)
+
+
+### Features
+
+* added json theme support ([5c8c92b](https://github.com/SethCohen/ASL/commit/5c8c92b7845762024bc5cdb8baf6361f3fcfec7d))
+* added review all cards implementation ([b145354](https://github.com/SethCohen/ASL/commit/b145354b1688047785f8b8b40379c4e6770d3d79))
+* **lesson:** added numerical progression indicator ([2c34d26](https://github.com/SethCohen/ASL/commit/2c34d26eccf292b3ffc1949ab68f61393e8a27e7))
+
+
+### Miscellaneous
+
+* added new dependencies ([cd53ba8](https://github.com/SethCohen/ASL/commit/cd53ba852e040e9bec2fcd576c363d45a7b4ba33))
+
+
+### Code Refactoring
+
+* replaced profile dropdown with profile page ([95b2f74](https://github.com/SethCohen/ASL/commit/95b2f74a374f0bd13ce4727d7d0014c8ddf440da))
+
+
+### Styles
+
+* **lesson:** changed lesson progress icon ([8cd3f3c](https://github.com/SethCohen/ASL/commit/8cd3f3c08aa5f552308404486e111922155d7b43))
+
 ## [1.7.1](https://github.com/SethCohen/ASL/compare/v1.7.0...v1.7.1) (2023-03-02)
 
 
