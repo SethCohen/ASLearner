@@ -32,7 +32,6 @@ class _FlashcardState extends State<Flashcard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0XFF121212),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
