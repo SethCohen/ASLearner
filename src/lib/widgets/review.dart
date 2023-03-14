@@ -29,10 +29,6 @@ class _ReviewState extends State<Review> {
           const SizedBox(height: 20),
           Text(
             'Card ${_currentCardIndex + 1} of $_cardsLength',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
           ),
           const SizedBox(height: 20),
           LinearProgressIndicator(

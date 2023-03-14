@@ -38,7 +38,6 @@ class _FlashcardState extends State<Flashcard> {
         children: [
           Text(
             widget.cardData['title'],
-            style: const TextStyle(fontSize: 20),
           ),
           // TODO replace network images with controllable video player
           ClipRRect(
@@ -51,9 +50,6 @@ class _FlashcardState extends State<Flashcard> {
           // TODO add instructional body text
           _isBlurred
               ? TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  ),
                   onPressed: () {
                     setState(() {
                       _isBlurred = !_isBlurred;
@@ -66,11 +62,6 @@ class _FlashcardState extends State<Flashcard> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.redAccent,
-                            textStyle:
-                                const TextStyle(fontWeight: FontWeight.w500),
-                          ),
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
@@ -80,11 +71,6 @@ class _FlashcardState extends State<Flashcard> {
                           child: const Text('Hard'),
                         ),
                         TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.blueAccent,
-                            textStyle:
-                                const TextStyle(fontWeight: FontWeight.w500),
-                          ),
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
@@ -94,11 +80,6 @@ class _FlashcardState extends State<Flashcard> {
                           child: const Text('Medium'),
                         ),
                         TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.greenAccent,
-                            textStyle:
-                                const TextStyle(fontWeight: FontWeight.w500),
-                          ),
                           onPressed: () {
                             setState(() {
                               widget.handleCardIndex();
@@ -110,10 +91,6 @@ class _FlashcardState extends State<Flashcard> {
                       ],
                     )
                   : TextButton(
-                      style: TextButton.styleFrom(
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                      ),
                       onPressed: () {
                         widget.handleCardIndex();
                         _handleCardProgress(0);

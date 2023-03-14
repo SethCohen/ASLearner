@@ -19,78 +19,52 @@ class _HomePageState extends State<HomePage> {
       FirebaseFirestore.instance.collection('lessons');
   final user = FirebaseAuth.instance.currentUser!;
 
-  int _selectedIndex = 0;
-
-  static const List<Widget> _widgetPages = <Widget>[
-    LessonsPage(),
-    DictionaryPage(),
-    ReviewPage(),
-    CreatorPage(),
-    ManagePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text('ASLearner'),
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-                child: const Text(
-                  'Lessons',
+      child: DefaultTabController(
+        length: 5,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.25),
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('ASLearner'),
+              automaticallyImplyLeading: false,
+              actions: const <Widget>[
+                TabBar(
+                  dividerColor: Colors.transparent,
+                  isScrollable: true,
+                  tabs: <Widget>[
+                    Tooltip(
+                        message: 'Lessons',
+                        child: Tab(icon: Icon(Icons.school))),
+                    Tooltip(
+                        message: 'Review',
+                        child: Tab(icon: Icon(Icons.history))),
+                    Tooltip(
+                        message: 'Dictionary',
+                        child: Tab(icon: Icon(Icons.find_in_page))),
+                    Tooltip(
+                        message: 'Creator',
+                        child: Tab(icon: Icon(Icons.design_services))),
+                    Tooltip(
+                        message: 'Profile',
+                        child: Tab(icon: Icon(Icons.account_circle))),
+                  ],
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-                child: const Text(
-                  'Review',
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                child: const Text(
-                  'Dictionary',
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 3;
-                  });
-                },
-                child: const Text(
-                  'Creator',
-                ),
-              ),
-              IconButton(
-                icon: CircleAvatar(
-                  backgroundImage: NetworkImage(user.photoURL!),
-                ),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 4;
-                  });
-                },
-              ),
-            ],
+              ],
+            ),
+            body: const TabBarView(children: <Widget>[
+              LessonsPage(),
+              ReviewPage(),
+              DictionaryPage(),
+              CreatorPage(),
+              ManagePage(),
+            ]),
           ),
-          body: _widgetPages.elementAt(_selectedIndex)),
+        ),
+      ),
     );
   }
 }

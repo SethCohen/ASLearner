@@ -35,14 +35,6 @@ class _LessonState extends State<Lesson> {
       child: Scaffold(
           appBar: AppBar(
             title: Text(_convertIdToTitle(lessonId)),
-            toolbarHeight: 80,
-            backgroundColor: const Color(0XFF292929),
-            titleTextStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.w500,
-            ),
-            elevation: 10,
           ),
           body: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -61,10 +53,6 @@ class _LessonState extends State<Lesson> {
                       const SizedBox(height: 20),
                       Text(
                         'Card ${_currentCardIndex + 1} of $_cardsLength',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
                       ),
                       const SizedBox(height: 20),
                       LinearProgressIndicator(

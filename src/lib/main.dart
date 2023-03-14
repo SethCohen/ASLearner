@@ -13,6 +13,7 @@ import 'package:asl/providers/google_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'firebase_options.dart';
+import 'package:asl/themes/comfy.dart';
 
 void main() async {
   SchemaValidator.enabled = false;
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'ASL Learner',
-          theme: theme,
+          theme: comfyTheme,
           home: const PageManager(),
           routes: <String, WidgetBuilder>{
             '/manageAccount': (BuildContext context) => const ManagePage(),

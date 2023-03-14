@@ -12,29 +12,27 @@ class SignOut extends StatelessWidget {
     return PopupMenuButton(
         icon: CircleAvatar(backgroundImage: NetworkImage(user.photoURL!)),
         itemBuilder: (context) => [
-          PopupMenuItem(
-            enabled: false,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircleAvatar(
-                    backgroundImage: NetworkImage(user.photoURL!)),
-                Text(user.displayName!, style: const TextStyle(fontWeight: FontWeight.bold),)
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [Text("Sign Out", style: TextStyle(fontWeight: FontWeight.bold)), Icon(Icons.logout)],
-            ),
-            onTap: (){
-              final provider =
-              Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.googleLogout();
-            },
-          ),
-        ]);
-
+              PopupMenuItem(
+                enabled: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(backgroundImage: NetworkImage(user.photoURL!)),
+                    Text(user.displayName!)
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [Text("Sign Out"), Icon(Icons.logout)],
+                ),
+                onTap: () {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.googleLogout();
+                },
+              ),
+            ]);
   }
 }

@@ -49,8 +49,6 @@ class _ManagePageState extends State<ManagePage> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  style:
-                      const ButtonStyle(splashFactory: NoSplash.splashFactory),
                   child: const Text('Cancel'),
                 ),
                 TextButton(
