@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.1](https://github.com/SethCohen/ASL/compare/v1.8.0...v1.8.1) (2023-03-14)
+
+
+### Styles
+
+* matched flashcard style to new theme ([b1396d1](https://github.com/SethCohen/ASL/commit/b1396d13738c2a0933d290c4694a4849f08b81d9))
+* more theme changes ([93d6a82](https://github.com/SethCohen/ASL/commit/93d6a8296ac3f3d65941f46db906e2db2a2e2640))
+* moved progress indicator to bottom ([ec34ee9](https://github.com/SethCohen/ASL/commit/ec34ee922bfaf2ca9ecff7b1d0f2b8b2156a7de3))
+* theme changes ([afa1073](https://github.com/SethCohen/ASL/commit/afa10739a98d76c228e508cba5da502204ecfa8e))
+
 ## [1.8.0](https://github.com/SethCohen/ASL/compare/v1.7.1...v1.8.0) (2023-03-13)
 
 
