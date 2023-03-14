@@ -54,10 +54,6 @@ class _LessonState extends State<Lesson> {
                       Text(
                         'Card ${_currentCardIndex + 1} of $_cardsLength',
                       ),
-                      const SizedBox(height: 20),
-                      LinearProgressIndicator(
-                        value: _currentCardIndex / _cardsLength,
-                      ),
                       IndexedStack(
                           index: _currentCardIndex,
                           children: cards.map((card) {
@@ -72,6 +68,12 @@ class _LessonState extends State<Lesson> {
                               isReview: isReview,
                             );
                           }).toList()),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      LinearProgressIndicator(
+                        value: _currentCardIndex / _cardsLength,
+                      ),
                     ],
                   );
                 } else if (snapshot.hasError) {
