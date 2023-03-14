@@ -18,12 +18,25 @@ final comfyTheme = ThemeData(
     elevation: 0,
     backgroundColor: Colors.transparent,
     foregroundColor: Color(0xFF9EC1CC),
+    titleTextStyle: TextStyle(
+      color: Color(0xFFF5EFEE),
+      fontSize: 22,
+      fontWeight: FontWeight.w500,
+    ),
   ),
-  tabBarTheme: const TabBarTheme(
-    labelColor: Color(0xFFF8CDC6),
-    unselectedLabelColor: Color(0xFF9EC1CC),
-    indicator: BoxDecoration(),
+  tabBarTheme: TabBarTheme(
+    labelColor: const Color(0xFFF8CDC6),
+    unselectedLabelColor: const Color(0xFF9EC1CC),
+    indicator: const BoxDecoration(),
     splashFactory: NoSplash.splashFactory,
+    overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      foregroundColor:
+          MaterialStateProperty.all<Color>(const Color(0xFFF8CDC6)),
+      overlayColor: MaterialStateProperty.all<Color>(const Color(0xFF425366)),
+    ),
   ),
   cardTheme: const CardTheme(
       elevation: 0,
