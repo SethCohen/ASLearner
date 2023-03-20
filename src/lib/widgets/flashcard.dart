@@ -129,6 +129,7 @@ class _FlashcardState extends State<Flashcard> {
                         },
                         child: const Text('Next'),
                       ),
+            if (!_isBlurred) Text(widget.cardData['instructions'] ?? ''),
           ],
         ),
       ),
