@@ -129,7 +129,16 @@ class _FlashcardState extends State<Flashcard> {
                         },
                         child: const Text('Next'),
                       ),
-            if (!_isBlurred) Text(widget.cardData['instructions'] ?? ''),
+            if (!_isBlurred && widget.cardData['instructions'] != '')
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 100,
+                  child: SingleChildScrollView(
+                    child: Text(widget.cardData['instructions']),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
