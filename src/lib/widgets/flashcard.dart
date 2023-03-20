@@ -45,7 +45,17 @@ class _FlashcardState extends State<Flashcard> {
                 imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
                 child: Image.network(widget.cardData['assetUrl'])),
           ),
-          // TODO add media control buttons: stop, prev frame, play/pause, next frame, playback speed
+          // TODO media controls implementation
+          Row(
+            children: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.stop)),
+              IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.skip_previous)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.play_arrow)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.skip_next)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.speed)),
+            ],
+          ),
           // TODO add instructional body text
           _isBlurred
               ? TextButton(
