@@ -31,82 +31,106 @@ class _FlashcardState extends State<Flashcard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            widget.cardData['title'],
-          ),
-          // TODO replace network images with controllable video player
-          ClipRRect(
-            child: ImageFiltered(
-                enabled: _isBlurred,
-                imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-                child: Image.network(widget.cardData['assetUrl'])),
-          ),
-          // TODO media controls implementation
-          Row(
-            children: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.stop)),
-              IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.skip_previous)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.play_arrow)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.skip_next)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.speed)),
-            ],
-          ),
-          // TODO add instructional body text
-          _isBlurred
-              ? TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _isBlurred = !_isBlurred;
-                    });
-                  },
-                  child: const Text('Reveal'),
-                )
-              : widget.isReview
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              widget.handleCardIndex();
-                              _handleCardProgress(0);
-                            });
-                          },
-                          child: const Text('Hard'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              widget.handleCardIndex();
-                              _handleCardProgress(2);
-                            });
-                          },
-                          child: const Text('Medium'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              widget.handleCardIndex();
-                              _handleCardProgress(5);
-                            });
-                          },
-                          child: const Text('Easy'),
-                        ),
-                      ],
-                    )
-                  : TextButton(
-                      onPressed: () {
-                        widget.handleCardIndex();
-                        _handleCardProgress(0);
-                      },
-                      child: const Text('Next'),
-                    )
-        ],
+    return SizedBox(
+      width: 300,
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              widget.cardData['title'],
+              style: const TextStyle(fontSize: 20),
+            ),
+            // TODO replace network images with controllable video player
+            ClipRRect(
+              child: ImageFiltered(
+                  enabled: _isBlurred,
+                  imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
+                  child: Image.network(widget.cardData['assetUrl'])),
+            ),
+            // TODO media controls implementation
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.stop),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.skip_previous),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.play_arrow),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.skip_next),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.speed),
+                ),
+              ],
+            ),
+            _isBlurred
+                ? TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isBlurred = !_isBlurred;
+                      });
+                    },
+                    child: const Text('Reveal'),
+                  )
+                : widget.isReview
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.redAccent),
+                            onPressed: () {
+                              setState(() {
+                                widget.handleCardIndex();
+                                _handleCardProgress(0);
+                              });
+                            },
+                            child: const Text('Hard'),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.blueAccent),
+                            onPressed: () {
+                              setState(() {
+                                widget.handleCardIndex();
+                                _handleCardProgress(2);
+                              });
+                            },
+                            child: const Text('Medium'),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.greenAccent),
+                            onPressed: () {
+                              setState(() {
+                                widget.handleCardIndex();
+                                _handleCardProgress(5);
+                              });
+                            },
+                            child: const Text('Easy'),
+                          ),
+                        ],
+                      )
+                    : TextButton(
+                        onPressed: () {
+                          widget.handleCardIndex();
+                          _handleCardProgress(0);
+                        },
+                        child: const Text('Next'),
+                      ),
+          ],
+        ),
       ),
     );
   }

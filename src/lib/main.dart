@@ -1,22 +1,16 @@
-import 'dart:convert';
-
 import 'package:asl/pages/manage_page.dart';
+import 'package:asl/themes/comfy.dart';
 import 'package:asl/widgets/lesson.dart';
 import 'package:asl/widgets/review.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:json_theme/json_theme.dart';
-import 'package:json_theme/json_theme_schemas.dart';
 import 'package:provider/provider.dart';
 import 'package:asl/widgets/page_manager.dart';
 import 'package:asl/providers/google_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'firebase_options.dart';
-import 'package:asl/themes/comfy.dart';
 
 void main() async {
-  SchemaValidator.enabled = false;
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -25,17 +19,11 @@ void main() async {
 
   setPathUrlStrategy();
 
-  final themeStr = await rootBundle.loadString('assets/themes/comfy.json');
-  final themeJson = jsonDecode(themeStr);
-  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-
-  runApp(MyApp(theme: theme));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.theme});
-
-  final ThemeData theme;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
