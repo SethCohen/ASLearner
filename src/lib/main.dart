@@ -1,4 +1,5 @@
 import 'package:asl/pages/manage_page.dart';
+import 'package:asl/providers/data_provider.dart';
 import 'package:asl/themes/comfy.dart';
 import 'package:asl/widgets/lesson.dart';
 import 'package:asl/widgets/review.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => GoogleSignInProvider()),
+          ChangeNotifierProvider(create: (_) => DataProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -23,6 +23,7 @@ dependencies:
   url_strategy: ^0.2.0
   snaplist: ^0.1.8
   image_sequence_animator: ^2.0.0
+  infinite_scroll_pagination: ^3.2.0
 
 dev_dependencies:
   flutter_test:

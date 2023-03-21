@@ -19,11 +19,11 @@ class _LessonState extends State<Lesson> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO add actual expression signs, not just alphabet | add more cards
     // TODO optional: quiz minigame at end of lesson or loop
 
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
+    // TODO fix error on lessonId is null???
     final lessonId = arguments['lessonId'] as String;
     final isReview = arguments['isReview'] as bool;
 
@@ -51,9 +51,6 @@ class _LessonState extends State<Lesson> {
                   return Column(
                     children: [
                       const SizedBox(height: 20),
-                      Text(
-                        'Card ${_currentCardIndex + 1} of $_cardsLength',
-                      ),
                       IndexedStack(
                           index: _currentCardIndex,
                           children: cards.map((card) {
@@ -71,8 +68,24 @@ class _LessonState extends State<Lesson> {
                       Expanded(
                         child: Container(),
                       ),
-                      LinearProgressIndicator(
-                        value: _currentCardIndex / _cardsLength,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child:
+                              Text('${_currentCardIndex + 1} / $_cardsLength'),
+                        ),
+                      ),
+                      TweenAnimationBuilder(
+                        tween: Tween<double>(
+                            begin: _currentCardIndex / _cardsLength,
+                            end: (_currentCardIndex + 1) / _cardsLength),
+                        duration: const Duration(milliseconds: 500),
+                        builder: (context, double value, child) {
+                          return LinearProgressIndicator(
+                            value: value,
+                          );
+                        },
                       ),
                     ],
                   );
@@ -97,6 +110,14 @@ class _LessonState extends State<Lesson> {
     setState(() {
       if (_currentCardIndex == _cardsLength - 1) {
         _handleComplete();
+
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(_user.uid)
+            .collection('progress')
+            .doc(_lessonId)
+            .update({'lessonCardsRemaining': 0});
+
         Navigator.pop(context);
       } else {
         _currentCardIndex++;

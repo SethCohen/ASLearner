@@ -27,13 +27,6 @@ class _ReviewState extends State<Review> {
       body: Column(
         children: [
           const SizedBox(height: 20),
-          Text(
-            'Card ${_currentCardIndex + 1} of $_cardsLength',
-          ),
-          const SizedBox(height: 20),
-          LinearProgressIndicator(
-            value: _currentCardIndex / _cardsLength,
-          ),
           IndexedStack(
               index: _currentCardIndex,
               children: cards.map((card) {
@@ -45,6 +38,19 @@ class _ReviewState extends State<Review> {
                   isReview: isReview,
                 );
               }).toList()),
+          Expanded(
+            child: Container(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('${_currentCardIndex + 1} / $_cardsLength'),
+            ),
+          ),
+          LinearProgressIndicator(
+            value: _currentCardIndex / _cardsLength,
+          ),
         ],
       ),
     );

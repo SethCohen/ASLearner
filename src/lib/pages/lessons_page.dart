@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:asl/providers/data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LessonsPage extends StatefulWidget {
   const LessonsPage({super.key});
@@ -10,149 +10,65 @@ class LessonsPage extends StatefulWidget {
 }
 
 class _LessonsPageState extends State<LessonsPage> {
-  final user = FirebaseAuth.instance.currentUser!;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.position.pixels <=
+          MediaQuery.of(context).size.height * 0.20) {
+        context.read<DataProvider>().loadMoreDecks();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection("lessons").snapshots(),
-          builder: (context, snapshot1) {
-            if (snapshot1.hasData) {
-              return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(user.uid)
-                    .collection("progress")
-                    .snapshots(),
-                builder: (context, snapshot2) {
-                  if (snapshot2.hasData) {
-                    final lessonsCollection = snapshot1.data!.docs;
-                    final progressCollection = snapshot2.data!.docs;
+    final decks = context.watch<DataProvider>().decks;
+    final user = context.watch<DataProvider>().user;
 
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.33,
-                      child: ListView.builder(
-                        itemCount: lessonsCollection.length,
-                        itemBuilder: (context, index) {
-                          final lesson = lessonsCollection[index];
-                          final lessonTitle = _convertIdToTitle(lesson.id);
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: decks.length,
+      itemBuilder: (context, index) {
+        final userDeckProgress = user.deckProgress[decks[index].id] ??
+            {'isCompleted': false, 'isInProgress': false, 'cards': {}};
+        final iconColour = _lessonColour(userDeckProgress);
 
-                          final lessonProgress =
-                              _getLessonProgress(progressCollection, lesson);
-
-                          final iconColour =
-                              _lessonColour(lessonProgress, lesson.id);
-
-                          return Card(
-                            child: ListTile(
-                                title: Text(lessonTitle),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      lessonProgress[index]
-                                              ['lessonCardsRemaining']
-                                          .toString(),
-                                      style: TextStyle(color: iconColour),
-                                    ),
-                                    Icon(Icons.check_circle, color: iconColour),
-                                  ],
-                                ),
-                                onTap: () => Navigator.pushNamed(
-                                      context,
-                                      '/lesson',
-                                      arguments: {
-                                        'lessonId': lesson.id,
-                                        'isReview': false,
-                                      },
-                                    )),
-                          );
-                        },
-                      ),
-                    );
-                  } else if (snapshot2.hasError) {
-                    return const Text('Something went wrong!');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              );
-            } else if (snapshot1.hasError) {
-              return const Text('Something went wrong!');
-            } else {
-              return const CircularProgressIndicator();
-            }
-          }),
+        return Card(
+          child: ListTile(
+              title: Text(decks[index].name),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    userDeckProgress['cards'].length.toString(),
+                    style: TextStyle(color: iconColour),
+                  ),
+                  Icon(Icons.check_circle, color: iconColour),
+                ],
+              ),
+              onTap: () => Navigator.pushNamed(
+                    context,
+                    '/lesson',
+                    arguments: {
+                      'deckName': decks[index].name,
+                      'isReview': false,
+                    },
+                  )),
+        );
+      },
     );
   }
 
-  String _convertIdToTitle(String input) {
-    return input.replaceAll('lesson', 'Lesson ');
-  }
-
-  List<Map<String, dynamic>> _getLessonProgress(
-    List<QueryDocumentSnapshot> progressCollection,
-    QueryDocumentSnapshot lesson,
-  ) {
-    _initializeLessonProgress(progressCollection, lesson);
-
-    return progressCollection.map((lessonProgress) {
-      final data = lessonProgress.data() as Map<String, dynamic>;
-      return {
-        'id': lessonProgress.id,
-        'complete': data['complete'],
-        'inProgress': data['inProgress'],
-        'lessonCardsRemaining': data['lessonCardsRemaining'],
-      };
-    }).toList();
-  }
-
-  void _initializeLessonProgress(
-    List<QueryDocumentSnapshot> progressCollection,
-    QueryDocumentSnapshot lesson,
-  ) {
-    bool lessonDoesntExist = !progressCollection
-        .any((lessonProgress) => lessonProgress.id == lesson.id);
-
-    if (lessonDoesntExist) {
-      FirebaseFirestore.instance
-          .collection("lessons")
-          .doc(lesson.id)
-          .collection('cards')
-          .get()
-          .then(
-        (value) {
-          final lessonCardsRemaining = value.size;
-          FirebaseFirestore.instance
-              .collection("users")
-              .doc(user.uid)
-              .collection("progress")
-              .doc(lesson.id)
-              .set(
-            {
-              "complete": false,
-              "inProgress": false,
-              "lessonCardsRemaining": lessonCardsRemaining
-            },
-            SetOptions(merge: true),
-          );
-        },
-      );
-    }
-  }
-
   Color _lessonColour(
-    List<Map<String, dynamic>> currentLessonProgress,
-    String lessonId,
+    Map<String, dynamic> currentLessonProgress,
   ) {
-    return currentLessonProgress
-            .where((element) => element['id'] == lessonId)
-            .first['complete']
+    return currentLessonProgress['isCompleted']
         ? Colors.green
-        : currentLessonProgress
-                .where((element) => element['id'] == lessonId)
-                .first['inProgress']
+        : currentLessonProgress['isInProgress']
             ? Colors.orange
             : Colors.black38;
   }

@@ -3,9 +3,9 @@ import 'package:asl/pages/dictionary_page.dart';
 import 'package:asl/pages/lessons_page.dart';
 import 'package:asl/pages/manage_page.dart';
 import 'package:asl/pages/review_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:asl/providers/data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,9 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  CollectionReference lessons =
-      FirebaseFirestore.instance.collection('lessons');
-  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  void initState() {
+    super.initState();
+    context.read<DataProvider>().loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +57,15 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            body: const TabBarView(children: <Widget>[
-              LessonsPage(),
-              ReviewPage(),
-              DictionaryPage(),
-              CreatorPage(),
-              ManagePage(),
-            ]),
+            body: const TabBarView(
+              children: <Widget>[
+                LessonsPage(),
+                ReviewPage(),
+                DictionaryPage(),
+                CreatorPage(),
+                ManagePage(),
+              ],
+            ),
           ),
         ),
       ),
