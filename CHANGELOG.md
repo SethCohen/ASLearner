@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.9.0](https://github.com/SethCohen/ASL/compare/v1.8.1...v1.9.0) (2023-03-21)
+
+
+### Features
+
+* added flashcard media control visuals ([eeecd5f](https://github.com/SethCohen/ASL/commit/eeecd5f06c5fb80f12fd425cda4dc2ff37dc6150))
+* added instructions display ([5e910f5](https://github.com/SethCohen/ASL/commit/5e910f532ceaec1b38c33d77f6b76e1917cd115e))
+* pagination ([8c68b71](https://github.com/SethCohen/ASL/commit/8c68b712e50358e43984de8d07351e5acb582037))
+
+
+### Miscellaneous
+
+* additional style changes ([7b44704](https://github.com/SethCohen/ASL/commit/7b44704853ee00afca5d5d494d509ac00de57ea9))
+
+
+### Styles
+
+* instruction box style changes ([ce48987](https://github.com/SethCohen/ASL/commit/ce4898768b521690e072d7d0f6fc2b7d87a01d96))
+
 ## [1.8.1](https://github.com/SethCohen/ASL/compare/v1.8.0...v1.8.1) (2023-03-14)
 
 
