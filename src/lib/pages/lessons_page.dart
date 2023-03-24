@@ -1,6 +1,7 @@
-import 'package:asl/providers/data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/lesson_model.dart';
+import '../providers/data_provider.dart';
 
 class LessonsPage extends StatefulWidget {
   const LessonsPage({super.key});
@@ -15,61 +16,49 @@ class _LessonsPageState extends State<LessonsPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.position.maxScrollExtent -
-              _scrollController.position.pixels <=
-          MediaQuery.of(context).size.height * 0.20) {
-        context.read<DataProvider>().loadMoreDecks();
-      }
-    });
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   Widget build(BuildContext context) {
-    final decks = context.watch<DataProvider>().decks;
-    final user = context.watch<DataProvider>().user;
+    final decks = context.watch<DataProvider>().lessons;
 
     return ListView.builder(
-      controller: _scrollController,
-      itemCount: decks.length,
-      itemBuilder: (context, index) {
-        final userDeckProgress = user.deckProgress[decks[index].id] ??
-            {'isCompleted': false, 'isInProgress': false, 'cards': {}};
-        final iconColour = _lessonColour(userDeckProgress);
-
-        return Card(
-          child: ListTile(
-              title: Text(decks[index].name),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    userDeckProgress['cards'].length.toString(),
-                    style: TextStyle(color: iconColour),
-                  ),
-                  Icon(Icons.check_circle, color: iconColour),
-                ],
-              ),
-              onTap: () => Navigator.pushNamed(
-                    context,
-                    '/lesson',
-                    arguments: {
-                      'deckName': decks[index].name,
-                      'isReview': false,
-                    },
-                  )),
-        );
-      },
-    );
+        controller: _scrollController,
+        itemCount: decks.length,
+        itemBuilder: (context, index) => _buildListItem(decks[index]));
   }
 
-  Color _lessonColour(
-    Map<String, dynamic> currentLessonProgress,
-  ) {
-    return currentLessonProgress['isCompleted']
-        ? Colors.green
-        : currentLessonProgress['isInProgress']
-            ? Colors.orange
-            : Colors.black38;
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      context.read<DataProvider>().loadMoreLessons();
+    }
   }
+
+  Color _lessonColour(cardsCompleted, cardsTotal) =>
+      cardsTotal == cardsCompleted
+          ? Colors.green
+          : cardsCompleted > 0
+              ? Colors.orange
+              : Colors.black38;
+
+  Widget _buildListItem(LessonModel deck) => Card(
+        child: ListTile(
+            title: Text(deck.title),
+            trailing: _buildTrailing(deck),
+            onTap: () => deck.navigateToLesson(context)),
+      );
+
+  Widget _buildTrailing(LessonModel deck) =>
+      Row(mainAxisSize: MainAxisSize.min, children: [
+        Text(
+          '${deck.cardsTotal - deck.cardsCompleted}',
+          style: TextStyle(
+              color: _lessonColour(deck.cardsCompleted, deck.cardsTotal)),
+        ),
+        Icon(Icons.check_circle,
+            color: _lessonColour(deck.cardsCompleted, deck.cardsTotal)),
+      ]);
 }

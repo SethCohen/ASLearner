@@ -49,3 +49,4 @@ google-services.json
 GoogleService-Info.plist
 .vscode/*
 src/lib/tests/*
+scripts/
