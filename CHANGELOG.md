@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.10.0](https://github.com/SethCohen/ASL/compare/v1.9.0...v1.10.0) (2023-03-24)
+
+
+### Features
+
+* added dynamic routing ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+* added pagination using Provider ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+* restructured and refactored entire project ([#19](https://github.com/SethCohen/ASL/issues/19)) ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+
+
+### Code Refactoring
+
+* lesson.dart -&gt; lesson_page.dart ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+* manage_page -&gt; profile_page.dart ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+* review.dart -&gt; review_page.dart ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+* updated project to use relative imports ([b87b4a3](https://github.com/SethCohen/ASL/commit/b87b4a3cc6631e3b7afcd632fbf007d5e25553cb))
+
 ## [1.9.0](https://github.com/SethCohen/ASL/compare/v1.8.1...v1.9.0) (2023-03-21)
 
 
