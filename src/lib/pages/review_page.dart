@@ -1,153 +1,86 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../models/flashcard_model.dart';
+import '../models/review_model.dart';
+import '../widgets/flashcard.dart';
 
-class ReviewPage extends StatefulWidget {
-  const ReviewPage({Key? key}) : super(key: key);
+class Review extends StatefulWidget {
+  const Review({super.key, required this.cards});
+  final List<ReviewModel> cards;
 
   @override
-  State<ReviewPage> createState() => _ReviewPageState();
+  State<Review> createState() => _ReviewState();
 }
 
-class _ReviewPageState extends State<ReviewPage> {
-  final _user = FirebaseAuth.instance.currentUser!;
-
-  Stream<List<Map<String, dynamic>>> _getCardsToReview() {
-    // TODO fix rebuild on stream change not working
-    return FirebaseFirestore.instance
-        .collection("users")
-        .doc(_user.uid)
-        .collection("progress")
-        .snapshots()
-        .asyncMap(
-      (lessonsSnapshot) async {
-        final lessonCards = await Future.wait(
-          lessonsSnapshot.docs.map(
-            (lesson) {
-              final lessonId = lesson.id;
-              return lesson.reference
-                  .collection('cards')
-                  .where('nextReview', isLessThan: DateTime.now())
-                  .get()
-                  .then(
-                (cards) {
-                  return cards.docs.map(
-                    (card) {
-                      final cardId = card.id;
-                      final cardData = card.data();
-                      return {
-                        'lessonId': lessonId,
-                        'cardId': cardId,
-                        'cardData': cardData,
-                      };
-                    },
-                  ).toList();
-                },
-              );
-            },
-          ),
-        );
-
-        return lessonCards.expand((cards) => cards).toList();
-      },
-    );
-  }
+class _ReviewState extends State<Review> {
+  int _currentCardIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: StreamBuilder(
-          stream: _getCardsToReview(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final cards = snapshot.data!;
-
-              final foldedCards = cards.fold(
-                <String, List<Map<String, dynamic>>>{},
-                (previousValue, element) {
-                  final lessonId = element['lessonId'] as String;
-                  final card = {
-                    'cardId': element['cardId'] as String,
-                    'cardData': element['cardData'] as Map<String, dynamic>
-                  };
-
-                  if (previousValue.containsKey(lessonId)) {
-                    previousValue[lessonId]!.add(card);
-                  } else {
-                    previousValue[lessonId] = [card];
-                  }
-
-                  return previousValue;
-                },
-              );
-
-              if (foldedCards.isEmpty) {
-                return const Text('No cards to review');
-              }
-
-              return SizedBox(
-                width: MediaQuery.of(context).size.width * 0.33,
-                child: Column(
-                  children: [
-                    Card(
-                      color: const Color(0XFF425366),
-                      child: ListTile(
-                        title: const Text('Review All'),
-                        trailing: Text(cards.length.toString()),
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/review',
-                            arguments: {
-                              'lessonId': 'All Cards',
-                              'cards': cards,
-                              'isReview': true,
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: foldedCards.length,
-                        itemBuilder: (context, index) {
-                          final lessonId = foldedCards.keys.elementAt(index);
-                          final lessonTitle = _convertIdToTitle(lessonId);
-
-                          return Card(
-                            color: const Color(0XFF425366),
-                            child: ListTile(
-                                title: Text(lessonTitle),
-                                trailing: Text(
-                                    foldedCards[lessonId]!.length.toString()),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/review',
-                                    arguments: {
-                                      'lessonId': lessonId,
-                                      'cards': foldedCards[lessonId]!,
-                                      'isReview': true,
-                                    },
-                                  );
-                                }),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return const CircularProgressIndicator();
-            }
-          }),
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          return true;
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.cards[0].deckId),
+            ),
+            body: Column(
+              children: [
+                _buildFlashcards(widget.cards),
+                // TODO set prograss indicator location fixed to bottom of screen
+                _buildProgressTextIndicator(),
+                _buildProgressBarIndicator(),
+              ],
+            )));
   }
 
-  String _convertIdToTitle(String input) {
-    return input.replaceAll('lesson', 'Lesson ');
+  void _handleIndex() => setState(() {
+        bool isCompleted = _currentCardIndex == widget.cards.length - 1;
+        if (isCompleted) {
+          Navigator.pop(context);
+        } else {
+          _currentCardIndex++;
+        }
+      });
+
+  List<Widget> _getFlashcards(List<ReviewModel> cards) => cards
+      .map((card) => Flashcard(
+            card: FlashcardModel.fromMap(
+              {
+                card.cardTitle: card.cardTitle,
+                card.cardInstructions: card.cardInstructions,
+                card.cardImage: card.cardImage
+              },
+              card.cardId,
+              card.deckId,
+            ),
+            handleIndex: _handleIndex,
+            isReview: true,
+          ))
+      .toList();
+
+  Widget _buildFlashcards(List<ReviewModel> cards) => Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: IndexedStack(
+          index: _currentCardIndex,
+          children: _getFlashcards(cards),
+        ),
+      );
+
+  Widget _buildProgressTextIndicator() {
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+        alignment: Alignment.centerRight,
+        child: Text('${_currentCardIndex + 1} / ${widget.cards.length}'));
+  }
+
+  Widget _buildProgressBarIndicator() {
+    return TweenAnimationBuilder(
+        tween: Tween<double>(
+            begin: _currentCardIndex / widget.cards.length,
+            end: (_currentCardIndex + 1) / widget.cards.length),
+        duration: const Duration(milliseconds: 1000),
+        builder: (context, double value, child) =>
+            LinearProgressIndicator(value: value));
   }
 }

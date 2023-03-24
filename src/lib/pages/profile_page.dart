@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/google_provider.dart';
 
-class ManagePage extends StatefulWidget {
-  const ManagePage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<ManagePage> createState() => _ManagePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ManagePageState extends State<ManagePage> {
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
