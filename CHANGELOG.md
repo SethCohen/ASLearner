@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.11.0](https://github.com/SethCohen/ASL/compare/v1.10.0...v1.11.0) (2023-03-26)
+
+
+### Features
+
+* added custom colour palette theme extension ([5bd4e7e](https://github.com/SethCohen/ASL/commit/5bd4e7e472fb302659c7d376b2cef1dc9eae6510))
+* added custom icon button ([5bd4e7e](https://github.com/SethCohen/ASL/commit/5bd4e7e472fb302659c7d376b2cef1dc9eae6510))
+* added popup instructions ([5bd4e7e](https://github.com/SethCohen/ASL/commit/5bd4e7e472fb302659c7d376b2cef1dc9eae6510))
+* added review page refresh on finished deck review ([d16b29b](https://github.com/SethCohen/ASL/commit/d16b29b5496285643dfd15cb666dad44e8329eae))
+* **lesson|review:** added spacing between progress bar and flashcards ([f84d3df](https://github.com/SethCohen/ASL/commit/f84d3dfa3e308415a9980e21c924740a312a3fb9))
+
+
+### Bug Fixes
+
+* **flashcard:** fixed empty instructions still showing up ([c25211b](https://github.com/SethCohen/ASL/commit/c25211bdc0548b311124672360f5b6311114100b))
+
+
+### Styles
+
+* added responsive flashcard width ([fe06a77](https://github.com/SethCohen/ASL/commit/fe06a77b8fb006085d6e0bbfa3fdc2113c41ddc4))
+
+
+### Miscellaneous
+
+* added additional TODOs ([f960452](https://github.com/SethCohen/ASL/commit/f960452e781f529c1d2fe5ff0af6386419c0a781))
+
 ## [1.10.0](https://github.com/SethCohen/ASL/compare/v1.9.0...v1.10.0) (2023-03-24)
 
 
