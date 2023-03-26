@@ -26,9 +26,11 @@ class _FlashcardState extends State<Flashcard> {
   @override
   Widget build(BuildContext context) {
     final bool isEmptyInstructions = widget.card.instructions == '';
+    double screenWidth = MediaQuery.of(context).size.width;
+    double cardWidth = screenWidth * 0.15;
 
     return SizedBox(
-      width: 300, // TODO make responsive
+      width: cardWidth,
       child: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
