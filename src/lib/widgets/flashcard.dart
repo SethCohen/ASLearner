@@ -25,6 +25,8 @@ class _FlashcardState extends State<Flashcard> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isEmptyInstructions = widget.card.instructions == '';
+
     return SizedBox(
       width: 300, // TODO make responsive
       child: Card(
@@ -38,7 +40,7 @@ class _FlashcardState extends State<Flashcard> {
             _buildMediaControls(),
             _buildFlashcardButtons(),
             // TODO replace instructions with FAB over and on bottom right of image
-            _buildInstructions(),
+            if (!_isImageBlurred && !isEmptyInstructions) _buildInstructions()
           ],
         ),
       ),
@@ -120,22 +122,13 @@ class _FlashcardState extends State<Flashcard> {
     );
   }
 
-  Widget _buildInstructions() {
-    final bool isEmptyInstructions = widget.card.instructions == '';
-
-    // TODO fix empty instructions still showing up
-    if (_isImageBlurred && isEmptyInstructions) {
-      return const SizedBox.shrink();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 100,
-        child: SingleChildScrollView(
-          child: Text(widget.card.instructions),
+  Widget _buildInstructions() => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: 100,
+          child: SingleChildScrollView(
+            child: Text(widget.card.instructions),
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
