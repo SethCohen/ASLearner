@@ -29,7 +29,7 @@ class _ReviewState extends State<Review> {
             body: Column(
               children: [
                 _buildFlashcards(widget.cards),
-                // TODO set prograss indicator location fixed to bottom of screen
+                const Spacer(flex: 1),
                 _buildProgressTextIndicator(),
                 _buildProgressBarIndicator(),
               ],

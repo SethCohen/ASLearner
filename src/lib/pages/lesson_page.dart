@@ -34,7 +34,7 @@ class _LessonState extends State<Lesson> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         _buildFlashcards(snapshot.data!.docs),
-                        // TODO set prograss indicator location fixed to bottom of screen
+                        const Spacer(flex: 1),
                         _buildProgressTextIndicator(),
                         _buildProgressBarIndicator(),
                       ],
