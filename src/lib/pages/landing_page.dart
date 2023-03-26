@@ -6,6 +6,8 @@ import '../providers/google_provider.dart';
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);
 
+  // TODO clean up code
+
   @override
   Widget build(BuildContext context) => Stack(children: [
         SvgPicture.asset(

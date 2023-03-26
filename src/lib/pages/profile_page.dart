@@ -11,6 +11,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // TODO restyle with Streaks on side
+
   @override
   Widget build(BuildContext context) {
     return ListView(

@@ -15,5 +15,6 @@ class PageManager extends StatelessWidget {
         ),
       );
 
-  // TODO update user's lastLogin, lastLearnt, streak data in firestore
+  // TODO update user's lastLogin to current timestamp
+  // TODO reset user's streak to 0 if last login was more than 24 hours ago
 }

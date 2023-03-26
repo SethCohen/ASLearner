@@ -10,7 +10,8 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
-    // TODO get all cards from lessons collection and allow the user to search for a word
+    // TODO create dictionary page
+    // TODO add searching functionality
     return const Center(child: CircularProgressIndicator());
   }
 }
