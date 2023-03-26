@@ -105,8 +105,6 @@ class DataProvider extends ChangeNotifier {
   Future<void> updateCardProgress(FlashcardModel flashcard, int quality) async {
     Sm sm = Sm();
 
-    // TODO remove flashcard from reviews list if flashcard is in reviews list
-
     // Gets card progress for the current user
     final card = await FirebaseFirestore.instance
         .collection('users')
@@ -156,6 +154,7 @@ class DataProvider extends ChangeNotifier {
             'interval': smResponse.interval,
             'repetitions': smResponse.repetitions,
             'userId': currentUser.uid,
+            'deckTitle': flashcard.deckTitle,
             'deckId': flashcard.deckId,
             'title': flashcard.title,
             'instructions': flashcard.instructions,
@@ -181,5 +180,10 @@ class DataProvider extends ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  void removeReview(String deckTitle) {
+    _reviews.remove(deckTitle);
+    notifyListeners();
   }
 }

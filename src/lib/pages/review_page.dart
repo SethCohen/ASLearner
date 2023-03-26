@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/flashcard_model.dart';
 import '../models/review_model.dart';
+import '../providers/data_provider.dart';
 import '../widgets/flashcard.dart';
 
 class Review extends StatefulWidget {
@@ -22,7 +24,7 @@ class _ReviewState extends State<Review> {
         },
         child: Scaffold(
             appBar: AppBar(
-              title: Text(widget.cards[0].deckId),
+              title: Text(widget.cards[0].deckTitle),
             ),
             body: Column(
               children: [
@@ -37,6 +39,7 @@ class _ReviewState extends State<Review> {
   void _handleIndex() => setState(() {
         bool isCompleted = _currentCardIndex == widget.cards.length - 1;
         if (isCompleted) {
+          context.read<DataProvider>().removeReview(widget.cards[0].deckTitle);
           Navigator.pop(context);
         } else {
           _currentCardIndex++;
@@ -47,12 +50,13 @@ class _ReviewState extends State<Review> {
       .map((card) => Flashcard(
             card: FlashcardModel.fromMap(
               {
-                card.cardTitle: card.cardTitle,
-                card.cardInstructions: card.cardInstructions,
-                card.cardImage: card.cardImage
+                'title': card.cardTitle,
+                'instructions': card.cardInstructions,
+                'image': card.cardImage,
               },
               card.cardId,
               card.deckId,
+              card.deckTitle,
             ),
             handleIndex: _handleIndex,
             isReview: true,

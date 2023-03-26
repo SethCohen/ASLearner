@@ -17,11 +17,12 @@ class _ReviewPageState extends State<ReviewPage> {
   void initState() {
     super.initState();
     context.read<DataProvider>().loadReviews();
-    _decks = context.read<DataProvider>().reviews;
   }
 
   @override
   Widget build(BuildContext context) {
+    _decks = context.watch<DataProvider>().reviews;
+
     if (_decks.isEmpty) {
       return const Center(child: Text('Nothing left to review! Good work!'));
     }
@@ -41,14 +42,16 @@ class _ReviewPageState extends State<ReviewPage> {
       child: ListTile(
           title: Text(deckTitle),
           trailing: Text('${cards?.length ?? 0}'),
-          onTap: () => _navigateToReview(deckTitle, cards)),
+          onTap: () => _navigateToReview(deckTitle, cards!)),
     );
   }
 
-  _navigateToReview(String deckTitle, List<ReviewModel>? cards) {
+  _navigateToReview(String deckTitle, List<ReviewModel> cards) {
+    final url = '/${deckTitle.toLowerCase().replaceAll('lesson ', 'review_')}';
+
     Navigator.pushNamed(
       context,
-      '/${deckTitle.toLowerCase().replaceAll(' ', '_')}',
+      url,
       arguments: {
         'cards': cards,
       },

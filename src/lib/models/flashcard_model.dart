@@ -1,4 +1,5 @@
 class FlashcardModel {
+  String deckTitle;
   String cardId;
   String deckId;
   String title;
@@ -6,7 +7,8 @@ class FlashcardModel {
   String image;
 
   FlashcardModel(
-      {required this.cardId,
+      {required this.deckTitle,
+      required this.cardId,
       required this.deckId,
       required this.title,
       required this.instructions,
@@ -16,13 +18,15 @@ class FlashcardModel {
     Map<String, dynamic> data,
     String cardId,
     String deckId,
+    String deckTitle,
   ) {
     return FlashcardModel(
+      deckTitle: deckTitle,
       cardId: cardId,
       deckId: deckId,
-      title: data['title'] as String,
-      instructions: data['instructions'] as String,
-      image: data['image'] as String,
+      title: data['title'],
+      instructions: data['instructions'],
+      image: data['image'],
     );
   }
 }

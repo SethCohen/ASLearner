@@ -1,7 +1,6 @@
 class ReviewModel {
   final String deckId;
   final String deckTitle;
-  final String deckDescription;
   final String cardId;
   final String cardTitle;
   final String cardInstructions;
@@ -12,7 +11,6 @@ class ReviewModel {
     required this.cardInstructions,
     required this.cardImage,
     required this.deckTitle,
-    required this.deckDescription,
     required this.cardId,
     required this.deckId,
   });
@@ -23,7 +21,6 @@ class ReviewModel {
         cardInstructions: data['instructions'],
         cardImage: data['image'],
         deckTitle: data['deckTitle'],
-        deckDescription: data['deckDescription'],
         deckId: data['deckId'],
       );
 }
