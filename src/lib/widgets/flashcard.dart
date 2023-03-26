@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/flashcard_model.dart';
 import '../providers/data_provider.dart';
+import 'custom_iconbutton.dart';
 
 class Flashcard extends StatefulWidget {
   const Flashcard({
@@ -22,6 +23,7 @@ class Flashcard extends StatefulWidget {
 
 class _FlashcardState extends State<Flashcard> {
   bool _isImageBlurred = true;
+  OverlayEntry? _popupOverlayEntry;
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +39,32 @@ class _FlashcardState extends State<Flashcard> {
           children: [
             _buildTitle(),
             // TODO replace network images with controllable apng||video player/frame controller
-            _buildImage(),
+            Stack(
+              children: [
+                _buildImage(),
+                if (!_isImageBlurred && !isEmptyInstructions)
+                  _buildInstructionsPopup(context),
+              ],
+            ),
             // TODO media controls implementation
             _buildMediaControls(),
             _buildFlashcardButtons(),
-            // TODO replace instructions with FAB over and on bottom right of image
-            if (!_isImageBlurred && !isEmptyInstructions) _buildInstructions()
           ],
         ),
       ),
     );
   }
+
+  Positioned _buildInstructionsPopup(BuildContext context) => Positioned(
+        bottom: 8,
+        right: 8,
+        child: CustomIconButton(
+          isSelected: _popupOverlayEntry != null,
+          onPressed: () =>
+              _popupOverlayEntry == null ? _showPopup(context) : _hidePopup(),
+          icon: const Icon(Icons.info_outline),
+        ),
+      );
 
   Widget _buildDifficultyButton(String text, int quality, Color color) =>
       TextButton(
@@ -124,13 +141,46 @@ class _FlashcardState extends State<Flashcard> {
     );
   }
 
-  Widget _buildInstructions() => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: 100,
-          child: SingleChildScrollView(
-            child: Text(widget.card.instructions),
+  Widget _buildInstructions(height, width) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: height,
+            width: width,
+            child: SingleChildScrollView(
+              child: Text(widget.card.instructions),
+            ),
           ),
         ),
       );
+
+  OverlayEntry _createPopup(BuildContext context) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final Size size = renderBox.size;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+
+    return OverlayEntry(
+      builder: (BuildContext context) => Positioned(
+        left: offset.dx + size.width,
+        top: offset.dy + size.height / 2,
+        child: _buildInstructions(size.height, size.width),
+      ),
+    );
+  }
+
+  void _showPopup(BuildContext context) {
+    _popupOverlayEntry = _createPopup(context);
+    Overlay.of(context).insert(_popupOverlayEntry!);
+  }
+
+  void _hidePopup() {
+    _popupOverlayEntry?.remove();
+    _popupOverlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _hidePopup();
+    super.dispose();
+  }
 }
