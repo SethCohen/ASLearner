@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     context.read<DataProvider>().loadLessons();
+    context.read<DataProvider>().loadDictionary();
   }
 
   @override

@@ -32,6 +32,7 @@ class _FlashcardState extends State<Flashcard> {
     double cardWidth = screenWidth * 0.15;
 
     return SizedBox(
+      // TODO fix responsiveness based of screen
       width: cardWidth,
       child: Card(
         child: Column(

@@ -23,6 +23,8 @@ class _LessonsPageState extends State<LessonsPage> {
   Widget build(BuildContext context) {
     final decks = context.watch<DataProvider>().lessons;
 
+    // TODO fix loading more lessons
+    // TODO add loading indicator
     return ListView.builder(
         controller: _scrollController,
         itemCount: decks.length,

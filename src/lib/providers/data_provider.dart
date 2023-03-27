@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spaced_repetition/sm.dart';
+import '../models/dictionary_model.dart';
 import '../models/lesson_model.dart';
 import '../models/flashcard_model.dart';
 import '../models/review_model.dart';
@@ -13,11 +14,14 @@ const pageSize = 5;
 class DataProvider extends ChangeNotifier {
   List<LessonModel> _lessons = [];
   Map<String, List<ReviewModel>> _reviews = {};
+  List<DictionaryModel> _dictionary = [];
 
   late DocumentSnapshot<Map<String, dynamic>> _lastDeckDoc;
+  late DocumentSnapshot<Map<String, dynamic>> _lastCardDoc;
 
   List<LessonModel> get lessons => _lessons;
   Map<String, List<ReviewModel>> get reviews => _reviews;
+  List<DictionaryModel> get dictionary => _dictionary;
 
   Future<void> loadLessons() async {
     final lessons = await FirebaseFirestore.instance
@@ -90,9 +94,9 @@ class DataProvider extends ChangeNotifier {
           .where('userId', isEqualTo: currentUser.uid)
           .get();
 
-      final reviewModelList = reviews.docs
-          .map((doc) => ReviewModel.fromMap(doc.id, doc.data()))
-          .toList();
+      final reviewModelList = reviews.docs.map((doc) {
+        return ReviewModel.fromMap(doc.id, doc.data());
+      }).toList();
       _reviews =
           groupBy(reviewModelList, (ReviewModel review) => review.deckTitle);
     } on Exception catch (e) {
@@ -187,6 +191,45 @@ class DataProvider extends ChangeNotifier {
 
   void removeReview(String deckTitle) {
     _reviews.remove(deckTitle);
+    notifyListeners();
+  }
+
+  Future<void> loadDictionary() async {
+    final dictionary = await FirebaseFirestore.instance
+        .collectionGroup('cards')
+        .where('type', isEqualTo: 'immutable')
+        .limit(pageSize)
+        .get();
+
+    _dictionary = dictionary.docs
+        .map((doc) => DictionaryModel.fromMap(doc.id, doc.data()))
+        .toList();
+
+    _lastCardDoc = dictionary.docs.last;
+
+    notifyListeners();
+  }
+
+  Future<void> loadMoreDictionary() async {
+    final cards = await FirebaseFirestore.instance
+        .collectionGroup('cards')
+        .where('type', isEqualTo: 'immutable')
+        .startAfterDocument(_lastCardDoc)
+        .limit(pageSize)
+        .get();
+
+    // If there are no more cards to fetch, return the current list of dictionary
+    if (cards.docs.isEmpty) {
+      return;
+    }
+
+    _dictionary = _dictionary
+      ..addAll(cards.docs
+          .map((doc) => DictionaryModel.fromMap(doc.id, doc.data()))
+          .toList());
+
+    _lastCardDoc = cards.docs.last;
+
     notifyListeners();
   }
 }
