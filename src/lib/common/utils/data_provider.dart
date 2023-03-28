@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spaced_repetition/sm.dart';
 import '../../features/dictionary/dictionary_model.dart';
-import '../../features/lesson/lesson_model.dart';
 import '../../features/flashcard/flashcard_model.dart';
 import '../../features/review/review_model.dart';
 
@@ -12,79 +11,13 @@ final currentUser = FirebaseAuth.instance.currentUser!;
 const pageSize = 5;
 
 class DataProvider extends ChangeNotifier {
-  List<LessonModel> _lessons = [];
   Map<String, List<ReviewModel>> _reviews = {};
   List<DictionaryModel> _dictionary = [];
 
-  late DocumentSnapshot<Map<String, dynamic>> _lastDeckDoc;
   late DocumentSnapshot<Map<String, dynamic>> _lastCardDoc;
 
-  List<LessonModel> get lessons => _lessons;
   Map<String, List<ReviewModel>> get reviews => _reviews;
   List<DictionaryModel> get dictionary => _dictionary;
-
-  Future<void> loadLessons() async {
-    final lessons = await FirebaseFirestore.instance
-        .collection('decks')
-        .orderBy('title')
-        .limit(pageSize)
-        .get();
-
-    _lessons = await Future.wait(lessons.docs.map((doc) async {
-      // Gets the progress of the current user for each deck
-      final userProgress = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
-          .collection('deckProgress')
-          .doc(doc.id)
-          .get();
-
-      // If the user has not started the lesson, the cardCount will be 0
-      return userProgress.exists
-          ? LessonModel.fromMap(doc.id, userProgress['cardCount'], doc.data())
-          : LessonModel.fromMap(doc.id, 0, doc.data());
-    }).toList());
-
-    _lastDeckDoc = lessons.docs.last;
-
-    notifyListeners();
-  }
-
-  Future<List<LessonModel>> loadMoreLessons() async {
-    final decks = await FirebaseFirestore.instance
-        .collection('decks')
-        .orderBy('name')
-        .startAfterDocument(_lastDeckDoc)
-        .limit(pageSize)
-        .get();
-
-    // If there are no more decks to fetch, return the current list of lessons
-    if (decks.docs.isEmpty) {
-      return _lessons;
-    }
-
-    // Gets the progress of the current user for each deck
-    final currentUser = FirebaseAuth.instance.currentUser!;
-    final deckProgressDocs = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUser.uid)
-        .collection('deckProgress')
-        .where(FieldPath.documentId,
-            whereIn: decks.docs.map((doc) => doc.id).toList())
-        .get();
-    _lessons = [];
-    for (final deck in decks.docs) {
-      final deckProgress = deckProgressDocs.docs
-          .firstWhere((doc) => doc.id == deck.id)['cardCount'];
-
-      // Adds the deck to the list of lessons
-      _lessons.add(LessonModel.fromMap(deck.id, deckProgress, deck.data()));
-    }
-
-    notifyListeners();
-
-    return _lessons;
-  }
 
   Future<void> loadReviews() async {
     try {
@@ -177,11 +110,6 @@ class DataProvider extends ChangeNotifier {
           .doc(flashcard.deckId);
       batch.set(deckRec, {'cardCount': FieldValue.increment(1)},
           SetOptions(merge: true));
-      _lessons = _lessons
-          .map((lesson) => lesson.id == flashcard.deckId
-              ? lesson.copyWith(cardsCompleted: lesson.cardsCompleted + 1)
-              : lesson)
-          .toList();
 
       await batch.commit();
 

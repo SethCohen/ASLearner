@@ -10,7 +10,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   } else if (settings.name!.contains("lesson")) {
     final args = settings.arguments as Map<String, dynamic>;
     return MaterialPageRoute(
-        builder: (_) => Lesson(lesson: args['lesson']), settings: settings);
+        builder: (_) => LessonDetails(
+            lessonId: args['lessonId'], lessonData: args['lessonData']),
+        settings: settings);
   } else if (settings.name!.contains("review")) {
     final args = settings.arguments as Map<String, dynamic>;
     return MaterialPageRoute(

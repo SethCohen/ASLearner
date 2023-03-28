@@ -1,42 +1,77 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'lesson_model.dart';
-import '../../common/utils/data_provider.dart';
 
-class LessonsPage extends StatefulWidget {
+class Lesson {
+  Lesson(
+      {required this.cardCount,
+      required this.title,
+      required this.description});
+
+  Lesson.fromMap(Map<String, Object?> data)
+      : this(
+          cardCount: data['cardCount'] as int,
+          title: data['title'] as String,
+          description: data['description'] as String,
+        );
+
+  final int cardCount;
+  final String title;
+  final String description;
+
+  Map<String, Object?> toMap() {
+    return {
+      'cardCount': cardCount,
+      'title': title,
+      'description': description,
+    };
+  }
+}
+
+class LessonsPage extends StatelessWidget {
   const LessonsPage({super.key});
 
   @override
-  State<LessonsPage> createState() => _LessonsPageState();
-}
-
-class _LessonsPageState extends State<LessonsPage> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final decks = context.watch<DataProvider>().lessons;
+    final decksQuery = FirebaseFirestore.instance
+        .collection('decks')
+        .orderBy('title')
+        .withConverter<Lesson>(
+          fromFirestore: (snapshot, _) => Lesson.fromMap(snapshot.data()!),
+          toFirestore: (deck, _) => deck.toMap(),
+        );
+    return FirestoreListView<Lesson>(
+      query: decksQuery,
+      itemBuilder: (context, deckSnapshot) {
+        Lesson deckData = deckSnapshot.data();
+        String deckId = deckSnapshot.id;
 
-    // TODO fix loading more lessons
-    // TODO add loading indicator
-    return ListView.builder(
-        controller: _scrollController,
-        itemCount: decks.length,
-        itemBuilder: (context, index) => _buildListItem(decks[index]));
+        return FutureBuilder<DocumentSnapshot>(
+          future: _getUserDeckProgress(deckId),
+          builder: (context, snapshot) {
+            int userDeckCardCount = 0;
+
+            if (snapshot.hasData && snapshot.data!.exists) {
+              userDeckCardCount = snapshot.data!['cardCount'];
+            }
+
+            return _buildListItem(context, deckId, deckData, userDeckCardCount);
+          },
+        );
+      },
+    );
   }
 
-  void _scrollListener() {
-    if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      context.read<DataProvider>().loadMoreLessons();
-    }
+  Future<DocumentSnapshot> _getUserDeckProgress(deckId) {
+    final currentuser = FirebaseAuth.instance.currentUser!;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentuser.uid)
+        .collection('deckProgress')
+        .doc(deckId)
+        .get();
   }
 
   Color _lessonColour(cardsCompleted, cardsTotal) =>
@@ -46,21 +81,31 @@ class _LessonsPageState extends State<LessonsPage> {
               ? Colors.orange
               : Colors.black38;
 
-  Widget _buildListItem(LessonModel deck) => Card(
+  Widget _buildListItem(BuildContext context, String deckId, Lesson deck,
+          int cardsCompleted) =>
+      Card(
         child: ListTile(
             title: Text(deck.title),
-            trailing: _buildTrailing(deck),
-            onTap: () => deck.navigateToLesson(context)),
+            subtitle: Text(deck.description),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              Text(
+                '${deck.cardCount - cardsCompleted}',
+                style: TextStyle(
+                    color: _lessonColour(cardsCompleted, deck.cardCount)),
+              ),
+              Icon(Icons.check_circle,
+                  color: _lessonColour(cardsCompleted, deck.cardCount)),
+            ]),
+            onTap: () => _navigateToLesson(context, deckId, deck)),
       );
 
-  Widget _buildTrailing(LessonModel deck) =>
-      Row(mainAxisSize: MainAxisSize.min, children: [
-        Text(
-          '${deck.cardsTotal - deck.cardsCompleted}',
-          style: TextStyle(
-              color: _lessonColour(deck.cardsCompleted, deck.cardsTotal)),
-        ),
-        Icon(Icons.check_circle,
-            color: _lessonColour(deck.cardsCompleted, deck.cardsTotal)),
-      ]);
+  void _navigateToLesson(BuildContext context, String deckId, Lesson deck) =>
+      Navigator.pushNamed(
+        context,
+        '/${deck.title.toLowerCase().replaceAll(' ', '_')}',
+        arguments: {
+          'lessonId': deckId,
+          'lessonData': deck,
+        },
+      );
 }

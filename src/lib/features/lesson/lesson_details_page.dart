@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'lesson_model.dart';
 import '../flashcard/flashcard_model.dart';
 import '../flashcard/flashcard.dart';
+import 'lessons_list_page.dart';
 
-class Lesson extends StatefulWidget {
-  const Lesson({super.key, required this.lesson});
-  final LessonModel lesson;
+class LessonDetails extends StatefulWidget {
+  const LessonDetails(
+      {super.key, required this.lessonId, required this.lessonData});
+  final String lessonId;
+  final Lesson lessonData;
 
   @override
-  State<Lesson> createState() => _LessonState();
+  State<LessonDetails> createState() => _LessonDetailsState();
 }
 
-class _LessonState extends State<Lesson> {
+class _LessonDetailsState extends State<LessonDetails> {
   int _currentCardIndex = 0;
 
   @override
@@ -25,7 +27,7 @@ class _LessonState extends State<Lesson> {
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(widget.lesson.title),
+            title: Text(widget.lessonData.title),
           ),
           body: FutureBuilder<QuerySnapshot>(
               future: _getCardsFuture(),
@@ -45,12 +47,12 @@ class _LessonState extends State<Lesson> {
 
   Future<QuerySnapshot> _getCardsFuture() => FirebaseFirestore.instance
       .collection("decks")
-      .doc(widget.lesson.id)
+      .doc(widget.lessonId)
       .collection('cards')
       .get();
 
   void _handleIndex() => setState(() {
-        bool isCompleted = _currentCardIndex == widget.lesson.cardsTotal - 1;
+        bool isCompleted = _currentCardIndex == widget.lessonData.cardCount - 1;
         if (isCompleted) {
           Navigator.pop(context);
         } else {
@@ -61,7 +63,7 @@ class _LessonState extends State<Lesson> {
   List<Widget> _getFlashcards(List<QueryDocumentSnapshot> cards) => cards
       .map((card) => Flashcard(
             card: FlashcardModel.fromMap(card.data() as Map<String, dynamic>,
-                card.id, widget.lesson.id, widget.lesson.title),
+                card.id, widget.lessonId, widget.lessonData.title),
             handleIndex: _handleIndex,
             isReview: false,
           ))
@@ -80,14 +82,15 @@ class _LessonState extends State<Lesson> {
     return Container(
         padding: const EdgeInsets.all(8.0),
         alignment: Alignment.centerRight,
-        child: Text('${_currentCardIndex + 1} / ${widget.lesson.cardsTotal}'));
+        child:
+            Text('${_currentCardIndex + 1} / ${widget.lessonData.cardCount}'));
   }
 
   Widget _buildProgressBarIndicator() {
     return TweenAnimationBuilder(
         tween: Tween<double>(
-            begin: _currentCardIndex / widget.lesson.cardsTotal,
-            end: (_currentCardIndex + 1) / widget.lesson.cardsTotal),
+            begin: _currentCardIndex / widget.lessonData.cardCount,
+            end: (_currentCardIndex + 1) / widget.lessonData.cardCount),
         duration: const Duration(milliseconds: 1000),
         builder: (context, double value, child) =>
             LinearProgressIndicator(value: value));
