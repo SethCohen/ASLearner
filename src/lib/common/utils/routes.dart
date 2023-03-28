@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../features/lesson/lesson_page.dart';
-import '../../features/review/review_page.dart';
+import '../../features/lesson/lesson_details_page.dart';
+import '../../features/review/review_details_page.dart';
 import '../../features/authentication/page_manager.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {

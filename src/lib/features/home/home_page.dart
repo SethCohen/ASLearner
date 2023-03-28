@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import '../../common/utils/data_provider.dart';
 import '../creator/creator_page.dart';
 import '../dictionary/dictionary_page.dart';
-import '../lesson/lessons_page.dart';
+import '../lesson/lessons_list_page.dart';
 import '../profile/profile_page.dart';
-import '../review/reviews_page.dart';
+import '../review/reviews_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
