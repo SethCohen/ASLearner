@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:url_strategy/url_strategy.dart';
-import 'providers/data_provider.dart';
-import 'providers/google_provider.dart';
-import 'firebase_options.dart';
-import 'routes.dart';
-import 'themes/comfy.dart';
+import 'common/utils/data_provider.dart';
+import 'features/authentication/google_provider.dart';
+import 'config/firebase_options.dart';
+import 'common/utils/routes.dart';
+import 'common/themes/comfy_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../pages/home_page.dart';
-import '../pages/landing_page.dart';
+import '../home/home_page.dart';
+import 'landing_page.dart';
 
 class PageManager extends StatelessWidget {
   const PageManager({Key? key}) : super(key: key);

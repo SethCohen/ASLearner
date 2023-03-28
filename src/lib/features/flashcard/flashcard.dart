@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/flashcard_model.dart';
-import '../providers/data_provider.dart';
-import 'custom_iconbutton.dart';
+import 'flashcard_model.dart';
+import '../../common/utils/data_provider.dart';
+import '../../common/widgets/custom_iconbutton.dart';
 
 class Flashcard extends StatefulWidget {
   const Flashcard({

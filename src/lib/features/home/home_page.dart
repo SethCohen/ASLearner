@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/data_provider.dart';
-import 'creator_page.dart';
-import 'dictionary_page.dart';
-import 'lessons_page.dart';
-import 'profile_page.dart';
-import 'reviews_page.dart';
+import '../../common/utils/data_provider.dart';
+import '../creator/creator_page.dart';
+import '../dictionary/dictionary_page.dart';
+import '../lesson/lessons_page.dart';
+import '../profile/profile_page.dart';
+import '../review/reviews_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

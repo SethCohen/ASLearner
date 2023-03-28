@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spaced_repetition/sm.dart';
-import '../models/dictionary_model.dart';
-import '../models/lesson_model.dart';
-import '../models/flashcard_model.dart';
-import '../models/review_model.dart';
+import '../../features/dictionary/dictionary_model.dart';
+import '../../features/lesson/lesson_model.dart';
+import '../../features/flashcard/flashcard_model.dart';
+import '../../features/review/review_model.dart';
 
 final currentUser = FirebaseAuth.instance.currentUser!;
 const pageSize = 5;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/lesson_model.dart';
-import '../providers/data_provider.dart';
+import 'lesson_model.dart';
+import '../../common/utils/data_provider.dart';
 
 class LessonsPage extends StatefulWidget {
   const LessonsPage({super.key});

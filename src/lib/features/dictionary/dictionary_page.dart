@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/data_provider.dart';
+import '../../common/utils/data_provider.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({super.key});

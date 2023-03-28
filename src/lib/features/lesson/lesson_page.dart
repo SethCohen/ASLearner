@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../models/lesson_model.dart';
-import '../models/flashcard_model.dart';
-import '../widgets/flashcard.dart';
+import 'lesson_model.dart';
+import '../flashcard/flashcard_model.dart';
+import '../flashcard/flashcard.dart';
 
 class Lesson extends StatefulWidget {
   const Lesson({super.key, required this.lesson});

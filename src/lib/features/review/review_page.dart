@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/flashcard_model.dart';
-import '../models/review_model.dart';
-import '../providers/data_provider.dart';
-import '../widgets/flashcard.dart';
+import '../flashcard/flashcard_model.dart';
+import 'review_model.dart';
+import '../../common/utils/data_provider.dart';
+import '../flashcard/flashcard.dart';
 
 class Review extends StatefulWidget {
   const Review({super.key, required this.cards});
