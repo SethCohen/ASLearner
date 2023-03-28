@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../common/utils/data_provider.dart';
+import '../../common/widgets/custom_tab.dart';
 import '../creator/creator_page.dart';
 import '../dictionary/dictionary_page.dart';
 import '../lesson/lessons_list_page.dart';
@@ -42,21 +43,26 @@ class _HomePageState extends State<HomePage> {
                     dividerColor: Colors.transparent,
                     isScrollable: true,
                     tabs: <Widget>[
-                      Tooltip(
-                          message: 'Lessons',
-                          child: Tab(icon: Icon(Icons.school))),
-                      Tooltip(
-                          message: 'Review',
-                          child: Tab(icon: Icon(Icons.history))),
-                      Tooltip(
-                          message: 'Dictionary',
-                          child: Tab(icon: Icon(Icons.find_in_page))),
-                      Tooltip(
-                          message: 'Creator',
-                          child: Tab(icon: Icon(Icons.design_services))),
-                      Tooltip(
-                          message: 'Profile',
-                          child: Tab(icon: Icon(Icons.account_circle))),
+                      CustomTab(
+                        message: 'Lessons',
+                        icon: Icons.school,
+                      ),
+                      CustomTab(
+                        message: 'Review',
+                        icon: Icons.history,
+                      ),
+                      CustomTab(
+                        message: 'Dictionary',
+                        icon: Icons.find_in_page,
+                      ),
+                      CustomTab(
+                        message: 'Creator',
+                        icon: Icons.design_services,
+                      ),
+                      CustomTab(
+                        message: 'Profile',
+                        icon: Icons.account_circle,
+                      ),
                     ],
                   ),
                 ],
