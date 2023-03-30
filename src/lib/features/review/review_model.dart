@@ -23,4 +23,9 @@ class ReviewModel {
         deckTitle: data['deckTitle'],
         deckId: data['deckId'],
       );
+
+  @override
+  String toString() {
+    return 'ReviewModel(deckId: $deckId, deckTitle: $deckTitle, cardId: $cardId, cardTitle: $cardTitle, cardInstructions: $cardInstructions, cardImage: $cardImage)';
+  }
 }

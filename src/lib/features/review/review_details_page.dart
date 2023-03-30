@@ -6,7 +6,8 @@ import '../../common/utils/data_provider.dart';
 import '../flashcard/flashcard.dart';
 
 class Review extends StatefulWidget {
-  const Review({super.key, required this.cards});
+  const Review({super.key, required this.title, required this.cards});
+  final String title;
   final List<ReviewModel> cards;
 
   @override
@@ -24,7 +25,7 @@ class _ReviewState extends State<Review> {
         },
         child: Scaffold(
             appBar: AppBar(
-              title: Text(widget.cards[0].deckTitle),
+              title: Text(widget.title),
             ),
             body: Column(
               children: [
@@ -39,7 +40,7 @@ class _ReviewState extends State<Review> {
   void _handleIndex() => setState(() {
         bool isCompleted = _currentCardIndex == widget.cards.length - 1;
         if (isCompleted) {
-          context.read<DataProvider>().removeReview(widget.cards[0].deckTitle);
+          context.read<DataProvider>().removeReview(widget.title);
           Navigator.pop(context);
         } else {
           _currentCardIndex++;

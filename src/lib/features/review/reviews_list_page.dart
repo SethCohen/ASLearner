@@ -27,11 +27,21 @@ class _ReviewPageState extends State<ReviewPage> {
       return const Center(child: Text('Nothing left to review! Good work!'));
     }
 
-    // TODO "All Cards" review page
-
-    return ListView.builder(
-        itemCount: _decks.length,
-        itemBuilder: (context, index) => _buildListItem(index));
+    final allCards = _decks.values.expand((element) => element).toList();
+    return Column(
+      children: [
+        Card(
+            child: ListTile(
+                title: const Text('Review All'),
+                trailing: Text('${allCards.length}'),
+                onTap: () => _navigateToReview('Review All', allCards))),
+        Expanded(
+          child: ListView.builder(
+              itemCount: _decks.length,
+              itemBuilder: (context, index) => _buildListItem(index)),
+        )
+      ],
+    );
   }
 
   Widget _buildListItem(index) {
@@ -53,6 +63,7 @@ class _ReviewPageState extends State<ReviewPage> {
       context,
       url,
       arguments: {
+        'title': deckTitle,
         'cards': cards,
       },
     );

@@ -16,7 +16,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   } else if (settings.name!.contains("review")) {
     final args = settings.arguments as Map<String, dynamic>;
     return MaterialPageRoute(
-        builder: (_) => Review(cards: args['cards']), settings: settings);
+        builder: (_) => Review(title: args['title'], cards: args['cards']),
+        settings: settings);
   } else {
     return MaterialPageRoute(
         builder: (_) => const PageManager(), settings: settings);

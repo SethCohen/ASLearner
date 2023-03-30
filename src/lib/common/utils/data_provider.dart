@@ -113,7 +113,11 @@ class DataProvider extends ChangeNotifier {
   }
 
   void removeReview(String deckTitle) {
-    _reviews.remove(deckTitle);
+    if (deckTitle == 'Review All') {
+      _reviews = {};
+    } else {
+      _reviews.remove(deckTitle);
+    }
     notifyListeners();
   }
 }
