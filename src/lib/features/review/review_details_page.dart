@@ -64,13 +64,21 @@ class _ReviewState extends State<Review> {
           ))
       .toList();
 
-  Widget _buildFlashcards(List<ReviewModel> cards) => Padding(
-        padding: const EdgeInsets.only(top: 20.0),
+  Widget _buildFlashcards(List<ReviewModel> cards) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: screenWidth * 0.25,
+        ),
         child: IndexedStack(
           index: _currentCardIndex,
           children: _getFlashcards(cards),
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildProgressTextIndicator() {
     return Container(

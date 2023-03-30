@@ -14,6 +14,8 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     final flashcardsQuery = FirebaseFirestore.instance
         .collectionGroup('cards')
         .where('type', isEqualTo: 'immutable')
@@ -47,9 +49,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 snapshot.fetchMore();
               }
 
-              return Flashcard(
-                card: snapshot.docs[index].data(),
-                type: CardType.dictionary,
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: screenWidth * 0.2,
+                ),
+                child: Flashcard(
+                  card: snapshot.docs[index].data(),
+                  type: CardType.dictionary,
+                ),
               );
             },
           ),

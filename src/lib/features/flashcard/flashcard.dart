@@ -30,31 +30,25 @@ class _FlashcardState extends State<Flashcard> {
   @override
   Widget build(BuildContext context) {
     final bool isEmptyInstructions = widget.card.instructions == '';
-    double screenWidth = MediaQuery.of(context).size.width;
-    double cardWidth = screenWidth * 0.15;
 
-    return SizedBox(
-      // TODO fix responsiveness based of screen
-      width: cardWidth,
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildTitle(),
-            // TODO replace network images with controllable apng||video player/frame controller
-            Stack(
-              children: [
-                _buildImage(),
-                if ((!_isImageBlurred || widget.type == CardType.dictionary) &&
-                    !isEmptyInstructions)
-                  _buildInstructionsPopup(context),
-              ],
-            ),
-            // TODO media controls implementation
-            _buildMediaControls(),
-            if (widget.type != CardType.dictionary) _buildFlashcardButtons(),
-          ],
-        ),
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildTitle(),
+          // TODO replace network images with controllable apng||video player/frame controller
+          Stack(
+            children: [
+              _buildImage(),
+              if ((!_isImageBlurred || widget.type == CardType.dictionary) &&
+                  !isEmptyInstructions)
+                _buildInstructionsPopup(context),
+            ],
+          ),
+          // TODO media controls implementation
+          _buildMediaControls(),
+          if (widget.type != CardType.dictionary) _buildFlashcardButtons(),
+        ],
       ),
     );
   }
@@ -103,11 +97,17 @@ class _FlashcardState extends State<Flashcard> {
 
   Widget _buildImage() => ClipRRect(
         child: widget.type == CardType.dictionary
-            ? Image.network(widget.card.image)
+            ? Image.network(
+                widget.card.image,
+                fit: BoxFit.cover,
+              )
             : ImageFiltered(
                 enabled: _isImageBlurred,
                 imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-                child: Image.network(widget.card.image),
+                child: Image.network(
+                  widget.card.image,
+                  fit: BoxFit.cover,
+                ),
               ),
       );
 
