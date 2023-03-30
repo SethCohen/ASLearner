@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/SethCohen/ASL/compare/v1.12.0...v1.13.0) (2023-03-30)
+
+
+### Features
+
+* updated Flashcard responsiveness ([9dea5a8](https://github.com/SethCohen/ASL/commit/9dea5a84be2808197e83236bdd0a53b40bc52319))
+
+
+### Miscellaneous
+
+* dependency upgrades and overrides ([9f80d6c](https://github.com/SethCohen/ASL/commit/9f80d6cece3ac45ed4fb9cf750d586ff093693fe))
+
 ## [1.12.0](https://github.com/SethCohen/ASL/compare/v1.11.0...v1.12.0) (2023-03-30)
 
 
