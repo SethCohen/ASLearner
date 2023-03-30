@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.12.0](https://github.com/SethCohen/ASL/compare/v1.11.0...v1.12.0) (2023-03-30)
+
+
+### Features
+
+* added `firebase_ui_firestore` dependency ([a48eaf0](https://github.com/SethCohen/ASL/commit/a48eaf09e358070ae7c822d299e6e8698970aebc))
+* added basic dictionary system ([3351465](https://github.com/SethCohen/ASL/commit/3351465e55f968f9d4673a7b3a560be3e9a05b76))
+* **comfy:** added filledbutton theme ([c63194e](https://github.com/SethCohen/ASL/commit/c63194eea1382dd03e66bbf36bb1d6789bd4c51c))
+* **dictionary:** updated dictionary system to use `firebase_ui_firestore` ([323fb0d](https://github.com/SethCohen/ASL/commit/323fb0d7ab3da5b0c6cd5f0b6a718dc3b741eff4))
+* **flashcard:** updated widget usability across different pages ([323fb0d](https://github.com/SethCohen/ASL/commit/323fb0d7ab3da5b0c6cd5f0b6a718dc3b741eff4))
+* **HomePage:** added custom tab ([28a7fd1](https://github.com/SethCohen/ASL/commit/28a7fd1a3c99e308e498fb7078a5291d8f3b5ea5))
+* restructured project to feature-first design ([c20df26](https://github.com/SethCohen/ASL/commit/c20df262bda54e75cd58610af4aeee3b63df9f35))
+* **review:** added review all cards system ([82bee53](https://github.com/SethCohen/ASL/commit/82bee53da52f91527860c9a215ef6e1709e8a52d))
+* updated lesson pagination to use new `firebase_ui_firestore` dependency ([8a6737b](https://github.com/SethCohen/ASL/commit/8a6737bf00e94ad68f9b8159ea3d87994200b081))
+
+
+### Miscellaneous
+
+* added additional TODOs ([3351465](https://github.com/SethCohen/ASL/commit/3351465e55f968f9d4673a7b3a560be3e9a05b76))
+* updated dependencies ([a48eaf0](https://github.com/SethCohen/ASL/commit/a48eaf09e358070ae7c822d299e6e8698970aebc))
+
+
+### Styles
+
+* **LandingPage:** cleaned and restyled ([c63194e](https://github.com/SethCohen/ASL/commit/c63194eea1382dd03e66bbf36bb1d6789bd4c51c))
+
+
+### Code Refactoring
+
+* **comfy:** added palette constants ([c63194e](https://github.com/SethCohen/ASL/commit/c63194eea1382dd03e66bbf36bb1d6789bd4c51c))
+* renamed lessons and reviews pages ([2ffc51a](https://github.com/SethCohen/ASL/commit/2ffc51ab6b24a21c4959b74a7cbff8a184d26f76))
+
 ## [1.11.0](https://github.com/SethCohen/ASL/compare/v1.10.0...v1.11.0) (2023-03-26)
 
 
