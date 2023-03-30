@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'common/utils/data_provider.dart';
 import 'features/authentication/google_provider.dart';
-import 'config/firebase_options.dart';
+import 'firebase_options.dart';
 import 'common/utils/routes.dart';
 import 'common/themes/comfy_theme.dart';
 
