@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spaced_repetition/sm.dart';
-import '../../features/dictionary/dictionary_model.dart';
 import '../../features/flashcard/flashcard_model.dart';
 import '../../features/review/review_model.dart';
 
@@ -12,12 +11,8 @@ const pageSize = 5;
 
 class DataProvider extends ChangeNotifier {
   Map<String, List<ReviewModel>> _reviews = {};
-  List<DictionaryModel> _dictionary = [];
-
-  late DocumentSnapshot<Map<String, dynamic>> _lastCardDoc;
 
   Map<String, List<ReviewModel>> get reviews => _reviews;
-  List<DictionaryModel> get dictionary => _dictionary;
 
   Future<void> loadReviews() async {
     try {
@@ -119,45 +114,6 @@ class DataProvider extends ChangeNotifier {
 
   void removeReview(String deckTitle) {
     _reviews.remove(deckTitle);
-    notifyListeners();
-  }
-
-  Future<void> loadDictionary() async {
-    final dictionary = await FirebaseFirestore.instance
-        .collectionGroup('cards')
-        .where('type', isEqualTo: 'immutable')
-        .limit(pageSize)
-        .get();
-
-    _dictionary = dictionary.docs
-        .map((doc) => DictionaryModel.fromMap(doc.id, doc.data()))
-        .toList();
-
-    _lastCardDoc = dictionary.docs.last;
-
-    notifyListeners();
-  }
-
-  Future<void> loadMoreDictionary() async {
-    final cards = await FirebaseFirestore.instance
-        .collectionGroup('cards')
-        .where('type', isEqualTo: 'immutable')
-        .startAfterDocument(_lastCardDoc)
-        .limit(pageSize)
-        .get();
-
-    // If there are no more cards to fetch, return the current list of dictionary
-    if (cards.docs.isEmpty) {
-      return;
-    }
-
-    _dictionary = _dictionary
-      ..addAll(cards.docs
-          .map((doc) => DictionaryModel.fromMap(doc.id, doc.data()))
-          .toList());
-
-    _lastCardDoc = cards.docs.last;
-
     notifyListeners();
   }
 }

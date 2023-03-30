@@ -5,17 +5,19 @@ import 'flashcard_model.dart';
 import '../../common/utils/data_provider.dart';
 import '../../common/widgets/custom_iconbutton.dart';
 
+enum CardType { review, dictionary, lesson }
+
 class Flashcard extends StatefulWidget {
   const Flashcard({
     super.key,
-    required this.handleIndex,
+    this.handleIndex,
     required this.card,
-    required this.isReview,
+    required this.type,
   });
 
-  final void Function() handleIndex;
+  final void Function()? handleIndex;
   final FlashcardModel card;
-  final bool isReview;
+  final CardType type;
 
   @override
   State<Flashcard> createState() => _FlashcardState();
@@ -43,13 +45,14 @@ class _FlashcardState extends State<Flashcard> {
             Stack(
               children: [
                 _buildImage(),
-                if (!_isImageBlurred && !isEmptyInstructions)
+                if ((!_isImageBlurred || widget.type == CardType.dictionary) &&
+                    !isEmptyInstructions)
                   _buildInstructionsPopup(context),
               ],
             ),
             // TODO media controls implementation
             _buildMediaControls(),
-            _buildFlashcardButtons(),
+            if (widget.type != CardType.dictionary) _buildFlashcardButtons(),
           ],
         ),
       ),
@@ -65,13 +68,6 @@ class _FlashcardState extends State<Flashcard> {
               _popupOverlayEntry == null ? _showPopup(context) : _hidePopup(),
           icon: const Icon(Icons.info_outline),
         ),
-      );
-
-  Widget _buildDifficultyButton(String text, int quality, Color color) =>
-      TextButton(
-        style: TextButton.styleFrom(foregroundColor: color),
-        onPressed: () => _handleButtonPress(widget.card, quality),
-        child: Text(text),
       );
 
   Widget _buildMediaControls() => Row(
@@ -106,16 +102,14 @@ class _FlashcardState extends State<Flashcard> {
       );
 
   Widget _buildImage() => ClipRRect(
-        child: ImageFiltered(
-            enabled: _isImageBlurred,
-            imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-            child: Image.network(widget.card.image)),
+        child: widget.type == CardType.dictionary
+            ? Image.network(widget.card.image)
+            : ImageFiltered(
+                enabled: _isImageBlurred,
+                imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
+                child: Image.network(widget.card.image),
+              ),
       );
-
-  void _handleButtonPress(FlashcardModel flashcard, int quality) {
-    context.read<DataProvider>().updateCardProgress(flashcard, quality);
-    widget.handleIndex();
-  }
 
   Widget _buildFlashcardButtons() {
     if (_isImageBlurred) {
@@ -125,7 +119,7 @@ class _FlashcardState extends State<Flashcard> {
       );
     }
 
-    if (widget.isReview) {
+    if (widget.type == CardType.review) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -140,6 +134,18 @@ class _FlashcardState extends State<Flashcard> {
       onPressed: () => _handleButtonPress(widget.card, 0),
       child: const Text('Next'),
     );
+  }
+
+  Widget _buildDifficultyButton(String text, int quality, Color color) =>
+      TextButton(
+        style: TextButton.styleFrom(foregroundColor: color),
+        onPressed: () => _handleButtonPress(widget.card, quality),
+        child: Text(text),
+      );
+
+  void _handleButtonPress(FlashcardModel flashcard, int quality) {
+    context.read<DataProvider>().updateCardProgress(flashcard, quality);
+    widget.handleIndex!();
   }
 
   Widget _buildInstructions(height, width) => Card(

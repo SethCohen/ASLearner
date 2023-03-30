@@ -62,10 +62,14 @@ class _LessonDetailsState extends State<LessonDetails> {
 
   List<Widget> _getFlashcards(List<QueryDocumentSnapshot> cards) => cards
       .map((card) => Flashcard(
-            card: FlashcardModel.fromMap(card.data() as Map<String, dynamic>,
-                card.id, widget.lessonId, widget.lessonData.title),
+            card: FlashcardModel.fromMap(
+              card.data() as Map<String, dynamic>,
+              card.id,
+              widget.lessonId,
+              widget.lessonData.title,
+            ),
             handleIndex: _handleIndex,
-            isReview: false,
+            type: CardType.lesson,
           ))
       .toList();
 

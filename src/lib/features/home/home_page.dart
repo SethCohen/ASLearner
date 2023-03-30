@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../common/utils/data_provider.dart';
 import '../../common/widgets/custom_tab.dart';
 import '../creator/creator_page.dart';
 import '../dictionary/dictionary_page.dart';
@@ -19,14 +17,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    context.read<DataProvider>().loadDictionary();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO restyle Tabs to have proper on hover and on select icon colours
-
     return SafeArea(
       child: DefaultTabController(
         length: 5,

@@ -59,7 +59,7 @@ class _ReviewState extends State<Review> {
               card.deckTitle,
             ),
             handleIndex: _handleIndex,
-            isReview: true,
+            type: CardType.review,
           ))
       .toList();
 

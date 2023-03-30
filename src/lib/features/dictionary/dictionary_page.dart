@@ -1,6 +1,8 @@
+import 'package:asl/features/flashcard/flashcard_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../common/utils/data_provider.dart';
+import '../flashcard/flashcard.dart';
 
 class DictionaryPage extends StatefulWidget {
   const DictionaryPage({super.key});
@@ -10,50 +12,49 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final cards = context.watch<DataProvider>().dictionary;
+    final flashcardsQuery = FirebaseFirestore.instance
+        .collectionGroup('cards')
+        .where('type', isEqualTo: 'immutable')
+        .orderBy('title')
+        .withConverter<FlashcardModel>(
+          fromFirestore: (snapshot, _) =>
+              FlashcardModel.fromMap(snapshot.data()!),
+          toFirestore: (flashcard, _) => flashcard.toMap(),
+        );
 
     // TODO add search bar
-    // TODO restyle with better loading indicator and better card design
-    return Scrollbar(
-      thumbVisibility: true,
-      controller: _scrollController,
-      child: ListView.builder(
-          controller: _scrollController,
-          itemCount: cards.length + 1,
-          itemBuilder: (context, index) {
-            if (index == cards.length) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: const Center(child: CircularProgressIndicator()),
+
+    return FirestoreQueryBuilder<FlashcardModel>(
+      query: flashcardsQuery,
+      builder: (context, snapshot, _) {
+        if (snapshot.isFetching) {
+          return const CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          debugPrint('error ${snapshot.error}');
+          return Text('error ${snapshot.error}');
+        }
+
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: List.generate(
+            snapshot.docs.length,
+            (index) {
+              if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                snapshot.fetchMore();
+              }
+
+              return Flashcard(
+                card: snapshot.docs[index].data(),
+                type: CardType.dictionary,
               );
-            }
-
-            return Card(
-              child: ListTile(
-                title: Text(cards[index].title),
-                subtitle: Text(cards[index].instructions),
-                leading: Image.network(cards[index].image),
-              ),
-            );
-          }),
+            },
+          ),
+        );
+      },
     );
-  }
-
-  void _scrollListener() {
-    if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      context.read<DataProvider>().loadMoreDictionary();
-    }
   }
 }
