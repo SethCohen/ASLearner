@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../common/widgets/custom_tab.dart';
+import '../authentication/google_provider.dart';
 import '../creator/creator_page.dart';
 import '../dictionary/dictionary_page.dart';
 import '../lesson/lessons_list_page.dart';
@@ -17,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _updateLastLogin();
   }
 
   @override
@@ -72,5 +76,38 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _updateLastLogin() async {
+    final user = context.read<GoogleSignInProvider>().user;
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((user) {
+      final userData = user.data() as Map<String, dynamic>;
+      final lastLogin = userData['lastLogin'] as Timestamp;
+      final lastLearnt = userData['lastLearnt'] as Timestamp;
+      final now = DateTime.now();
+      final startOfDay = DateTime(now.year, now.month, now.day);
+      final loginTimeDifference = startOfDay.difference(lastLogin.toDate());
+      final lastLearntTimeDifference =
+          startOfDay.difference(lastLearnt.toDate());
+
+      if (loginTimeDifference.inHours >= 24 ||
+          lastLearntTimeDifference.inHours >= 24) {
+        FirebaseFirestore.instance.collection('users').doc(user.id).set({
+          'streak': 0,
+          'lastLogin': now,
+        }, SetOptions(merge: true));
+      } else {
+        FirebaseFirestore.instance.collection('users').doc(user.id).set({
+          'lastLogin': now,
+        }, SetOptions(merge: true));
+      }
+    }).catchError((error) {
+      debugPrint(error);
+    });
   }
 }

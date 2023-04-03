@@ -64,6 +64,7 @@ class _FlashcardState extends State<Flashcard> {
         ),
       );
 
+  // ignore: unused_element
   Widget _buildMediaControls() => Row(
         mainAxisSize: MainAxisSize.min,
         children: [

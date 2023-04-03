@@ -37,8 +37,27 @@ class DataProvider extends ChangeNotifier {
   Future<void> updateCardProgress(FlashcardModel flashcard, int quality) async {
     Sm sm = Sm();
 
-    // TODO update user lastLearnt timestamp in Firestore
-    // TODO increment user streak value in Firestore if last streak timestamp was 1 day ago else reset streakt to 1
+    // Updates streak
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .get()
+        .then((user) {
+      final userData = user.data() as Map<String, dynamic>;
+      final lastLearnt = (userData['lastLearnt'] as Timestamp).toDate();
+      final now = DateTime.now();
+      DateTime lastStreakUpdate =
+          DateTime(lastLearnt.year, lastLearnt.month, lastLearnt.day);
+      DateTime today = DateTime(now.year, now.month, now.day);
+
+      if (lastStreakUpdate != today) {
+        user.reference.set({
+          'streak': FieldValue.increment(1),
+        }, SetOptions(merge: true));
+      }
+    }).catchError((error) {
+      debugPrint(error);
+    });
 
     // Gets card progress for the current user
     final card = await FirebaseFirestore.instance

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../authentication/google_provider.dart';
 import '../flashcard/flashcard_model.dart';
 import '../flashcard/flashcard.dart';
 import 'lessons_list_page.dart';
@@ -54,6 +56,15 @@ class _LessonDetailsState extends State<LessonDetails> {
   void _handleIndex() => setState(() {
         bool isCompleted = _currentCardIndex == widget.lessonData.cardCount - 1;
         if (isCompleted) {
+          final currentUser = context.read<GoogleSignInProvider>().user;
+
+          FirebaseFirestore.instance
+              .collection("users")
+              .doc(currentUser!.uid)
+              .set({
+            'lastLearnt': DateTime.now(),
+          }, SetOptions(merge: true));
+
           Navigator.pop(context);
         } else {
           _currentCardIndex++;

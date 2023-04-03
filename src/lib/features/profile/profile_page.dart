@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../common/themes/comfy_theme.dart';
@@ -14,6 +15,18 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  int? streak = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getStreak().then((value) {
+      setState(() {
+        streak = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = context.read<GoogleSignInProvider>().user!;
@@ -65,8 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           .unselected),
                   children: [
                     TextSpan(
-                      // TODO get streak from database
-                      text: '\n0',
+                      text: '\n$streak',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Theme.of(context)
                               .extension<CustomPalette>()!
@@ -136,5 +148,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ));
+  }
+
+  Future<int> _getStreak() async {
+    final currentUser = context.read<GoogleSignInProvider>().user!;
+
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .get();
+
+    if (userDoc.exists) {
+      final userData = userDoc.data() as Map<String, dynamic>;
+      return userData['streak'];
+    } else {
+      debugPrint('Document does not exist on the database');
+      return 0;
+    }
   }
 }
