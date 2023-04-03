@@ -46,7 +46,7 @@ class _FlashcardState extends State<Flashcard> {
             ],
           ),
           // TODO media controls implementation
-          _buildMediaControls(),
+          // _buildMediaControls(),
           if (widget.type != CardType.dictionary) _buildFlashcardButtons(),
         ],
       ),
