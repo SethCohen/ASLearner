@@ -47,8 +47,8 @@ class LessonsPage extends StatelessWidget {
         Lesson deckData = deckSnapshot.data();
         String deckId = deckSnapshot.id;
 
-        return FutureBuilder<DocumentSnapshot>(
-          future: _getUserDeckProgress(deckId),
+        return StreamBuilder<DocumentSnapshot>(
+          stream: _getUserDeckProgress(deckId),
           builder: (context, snapshot) {
             int userDeckCardCount = 0;
 
@@ -63,7 +63,7 @@ class LessonsPage extends StatelessWidget {
     );
   }
 
-  Future<DocumentSnapshot> _getUserDeckProgress(deckId) {
+  Stream<DocumentSnapshot> _getUserDeckProgress(deckId) {
     final currentuser = FirebaseAuth.instance.currentUser!;
 
     return FirebaseFirestore.instance
@@ -71,7 +71,7 @@ class LessonsPage extends StatelessWidget {
         .doc(currentuser.uid)
         .collection('deckProgress')
         .doc(deckId)
-        .get();
+        .snapshots();
   }
 
   Color _lessonColour(cardsCompleted, cardsTotal) =>
