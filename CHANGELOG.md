@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.14.0](https://github.com/SethCohen/ASLearner/compare/v1.13.0...v1.14.0) (2023-04-03)
+
+
+### Features
+
+* adde last login tracker ([bdb87bb](https://github.com/SethCohen/ASLearner/commit/bdb87bb898a457b0c0512f41ad93906e14a5b9dc))
+* added custom rounded divider ([17b657f](https://github.com/SethCohen/ASLearner/commit/17b657f8e80f5481ee0196ef99fe1a9b187edb1f))
+* added last learnt tracker ([bdb87bb](https://github.com/SethCohen/ASLearner/commit/bdb87bb898a457b0c0512f41ad93906e14a5b9dc))
+* added streak tracker ([bdb87bb](https://github.com/SethCohen/ASLearner/commit/bdb87bb898a457b0c0512f41ad93906e14a5b9dc))
+* added web favicon ([5f44ec1](https://github.com/SethCohen/ASLearner/commit/5f44ec152393abeec1d6ae4419ada050ad69858a))
+* **profile:** implemented stylized profile page ([83c0aa4](https://github.com/SethCohen/ASLearner/commit/83c0aa4fc0afef176cfc0665cd4509c871e77127))
+* **review:** added next available review indicator ([6486dce](https://github.com/SethCohen/ASLearner/commit/6486dce7517249710ca6f06397b61b18b99ce5dc))
+
+
+### Bug Fixes
+
+* **custom_iconbutton:** fixed on null isSelected ([83c0aa4](https://github.com/SethCohen/ASLearner/commit/83c0aa4fc0afef176cfc0665cd4509c871e77127))
+* **lesson:** fixed lesson progress not updating ([c7281cf](https://github.com/SethCohen/ASLearner/commit/c7281cf3f7579cc35ddc376c53afc1ae9c9c5610))
+
+
+### Miscellaneous
+
+* updated Dockerfiles to use env variables ([d397357](https://github.com/SethCohen/ASLearner/commit/d397357d0c645f248887ffcbc69a3d932340c757))
+* updated project name "asl" &gt; "aslearner" ([c817db3](https://github.com/SethCohen/ASLearner/commit/c817db313d5a2a72502a4656e9347ee4d9e62d2b))
+* updated README for better instructions ([d397357](https://github.com/SethCohen/ASLearner/commit/d397357d0c645f248887ffcbc69a3d932340c757))
+
+
+### Styles
+
+* **creator:** changed page status indication to show page is still under construction ([7d99506](https://github.com/SethCohen/ASLearner/commit/7d9950646b26c6f9033e156e477f2f6e11c008b0))
+* **dictionary:** fixed loading indicator size ([4ca3d38](https://github.com/SethCohen/ASLearner/commit/4ca3d38b9c8ecec40bdcb86960b0b1204e75bf88))
+* **flashcard:** hid unused media controller buttons ([1b23e6b](https://github.com/SethCohen/ASLearner/commit/1b23e6b353fa7fb97a37f1f18543a973e1a82a31))
+* **review:** restyled next available review indicator ([43c89fa](https://github.com/SethCohen/ASLearner/commit/43c89fa8490b50f6ae4989fd4c46e627b64675f8))
+
 ## [1.13.0](https://github.com/SethCohen/ASL/compare/v1.12.0...v1.13.0) (2023-03-30)
 
 
