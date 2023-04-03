@@ -32,33 +32,35 @@ class _DictionaryPageState extends State<DictionaryPage> {
       query: flashcardsQuery,
       builder: (context, snapshot, _) {
         if (snapshot.isFetching) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
           debugPrint('error ${snapshot.error}');
           return Text('error ${snapshot.error}');
         }
 
-        return Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: List.generate(
-            snapshot.docs.length,
-            (index) {
-              if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                snapshot.fetchMore();
-              }
+        return SingleChildScrollView(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(
+              snapshot.docs.length,
+              (index) {
+                if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                  snapshot.fetchMore();
+                }
 
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: screenWidth * 0.2,
-                ),
-                child: Flashcard(
-                  card: snapshot.docs[index].data(),
-                  type: CardType.dictionary,
-                ),
-              );
-            },
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: screenWidth * 0.2,
+                  ),
+                  child: Flashcard(
+                    card: snapshot.docs[index].data(),
+                    type: CardType.dictionary,
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
