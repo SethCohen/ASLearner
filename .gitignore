@@ -49,3 +49,4 @@ google-services.json
 GoogleService-Info.plist
 src/lib/tests/*
 scripts/
+.env

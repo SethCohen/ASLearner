@@ -1,19 +1,56 @@
-# asl
+# ASLearner [![Website](https://img.shields.io/website?label=aslearner.apps.science.ontariotechu.ca&style=for-the-badge&url=https%3A%2F%2Faslearner.apps.science.ontariotechu.ca)](https://aslearner.apps.science.ontariotechu.ca/)
 
-An ASL Learning app.
+An American Sign Language Learning app.
 
-## How to run project
+## Contributing, Selh-Hosting, and Deploying
 
-Debugging: `flutter run -d chrome --web-hostname localhost --web-port 7357`
+### Setting everything up
 
-Deploying:
+1. [Fork the repository.](https://github.com/SethCohen/ASLearner/fork)
+2. [Create and setup your own Firebase project.](https://firebase.google.com/docs/web/setup)
+3. Configure Flutter for Firebase Web
+   1. `$ cd src`
+   2. `$ firebase login`
+   3. `$ dart pub global activate flutterfire_cli`
+4. [Setup Firestore](https://firebase.google.com/docs/firestore/quickstart) and add some sample data with the following structure.
 
-1. Run `docker build . -t flutter_docker` in terminal.
-2. Run `docker run --rm -d -p 7357:80/tcp flutter_docker:latest` in terminal.
+    1. ```yaml
+        decks/
+            <deckId>
+                cardCount: int
+                description: string
+                title: string
+                cards/
+                    <cardId>
+                        image: string
+                        instructions: string
+                        title: string
+                        type: string="immutable"
+        users/
+        ```
+
+5. [Setup Google Sign In Web](https://pub.dev/packages/google_sign_in_web#usage)
+   1. Edit `src/web/index.html` and replace `<meta name="google-signin-client_id" content="YOUR_GOOGLE_SIGN_IN_CLIENT_ID_HERE.apps.googleusercontent.com">`.
+
+### Running the project
+
+#### Debugging
+
+1. `$ flutter run -d chrome --web-hostname localhost --web-port 7357`
+
+#### Deploying using docker
+
+1. Create a `.env` file
+
+```yaml
+PROJECT_ID="YOUR_FIREBASE_PROJECT_ID_HERE"
+FIREBASE_TOKEN="YOUR_FIREBASE_TOKEN_HERE" # Generated from $ firebase login:ci
+```
+
+2. `$ docker compose build`
 3. Go to `http://localhost:7357/` in browser.
 
-or alternatively
+### Contributing
 
-1. Run `flutter build web` in terminal.
-2. Run `python -m http.server 7357` in terminal.
-3. Go to `http://localhost:7357/build/web/` in browser.
+1. Make your changes.
+2. Submit a pull request.

@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  aslearner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PROJECT_ID: ${PROJECT_ID}
+        FIREBASE_TOKEN: ${FIREBASE_TOKEN}
+    env_file: .env
+    ports:
+      - "7357:80"
