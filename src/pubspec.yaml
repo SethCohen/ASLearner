@@ -23,6 +23,7 @@ dependencies:
   firebase_auth: ^4.4.0
   cloud_firestore: ^4.5.0
   intl: ^0.18.0
+  icons_launcher: ^2.1.0
 
 dependency_overrides:
   intl: ^0.18.0
@@ -37,3 +38,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+icons_launcher:
+  image_path: "assets/favicon.png"
+  platforms:
+    web:
+      enable: true
