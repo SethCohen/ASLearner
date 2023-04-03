@@ -43,6 +43,18 @@ class GoogleSignInProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteUser() async {
+    try {
+      await _user!.delete();
+      await _googleSignIn.disconnect();
+      await _auth.signOut();
+      _user = null;
+      notifyListeners();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   Future<User?> signInWithGoogle(GoogleSignInAccount googleUser) async {
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;

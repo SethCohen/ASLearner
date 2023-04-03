@@ -3,12 +3,12 @@ import '../themes/comfy_theme.dart';
 
 class CustomIconButton extends StatefulWidget {
   final Icon icon;
-  final bool? isSelected;
+  final bool isSelected;
   final VoidCallback onPressed;
 
   const CustomIconButton({
     super.key,
-    this.isSelected,
+    this.isSelected = false,
     required this.icon,
     required this.onPressed,
   });
@@ -31,7 +31,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
         icon: widget.icon,
         color: _isHovering
             ? themeData.extension<CustomPalette>()!.hover
-            : widget.isSelected!
+            : widget.isSelected
                 ? themeData.extension<CustomPalette>()!.selected
                 : themeData.extension<CustomPalette>()!.unselected,
         onPressed: widget.onPressed,
