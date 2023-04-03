@@ -1,4 +1,4 @@
-name: asl
+name: aslearner
 description: An ASL Learning app.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "asl" "\0"
+            VALUE "CompanyName", "seth.cohen" "\0"
+            VALUE "FileDescription", "aslearner" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "asl" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "asl.exe" "\0"
-            VALUE "ProductName", "asl" "\0"
+            VALUE "InternalName", "aslearner" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 seth.cohen. All rights reserved." "\0"
+            VALUE "OriginalFilename", "aslearner.exe" "\0"
+            VALUE "ProductName", "aslearner" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

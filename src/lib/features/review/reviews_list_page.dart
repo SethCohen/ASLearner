@@ -1,7 +1,7 @@
-import 'package:asl/features/review/review_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../common/utils/data_provider.dart';
+import 'review_model.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({Key? key}) : super(key: key);

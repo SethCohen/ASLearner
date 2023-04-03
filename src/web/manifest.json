@@ -1,6 +1,6 @@
 {
-    "name": "asl",
-    "short_name": "asl",
+    "name": "aslearner",
+    "short_name": "aslearner",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

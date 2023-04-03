@@ -1,5 +1,6 @@
-import 'package:asl/common/themes/comfy_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../themes/comfy_theme.dart';
 
 class CustomTab extends StatelessWidget {
   final String message;
