@@ -48,5 +48,5 @@ firebase_options.dart
 google-services.json
 GoogleService-Info.plist
 src/lib/tests/*
-scripts/
 .env
+scripts/serviceAccount.json

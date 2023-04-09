@@ -1,0 +1,140 @@
+{
+    "lessons": [
+        {
+            "title": "Lesson 01",
+            "description": "Alphabet & Fingerspelling",
+            "cards": [
+                {
+                    "title": "A",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/los0OXu.png"
+                },
+                {
+                    "title": "B",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/RfvJsCm.png"
+                },
+                {
+                    "title": "C",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/64c4aKB.png"
+                },
+                {
+                    "title": "D",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/CHNajF8.png"
+                },
+                {
+                    "title": "E",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/Swx1pQp.png"
+                },
+                {
+                    "title": "F",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/HWkiSO2.png"
+                },
+                {
+                    "title": "G",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/ltM8BFI.png"
+                },
+                {
+                    "title": "H",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/OXUOZeB.png"
+                },
+                {
+                    "title": "I",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/enI6cWA.png"
+                },
+                {
+                    "title": "J",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/NJ3BkD3.png"
+                },
+                {
+                    "title": "K",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/WVWnpBv.png"
+                },
+                {
+                    "title": "L",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/HDXkGtJ.png"
+                },
+                {
+                    "title": "M",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/pU1Bdia.png"
+                },
+                {
+                    "title": "N",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/osBxb3O.png"
+                },
+                {
+                    "title": "O",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/HLTZKeh.png"
+                },
+                {
+                    "title": "P",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/p5U5iSh.png"
+                },
+                {
+                    "title": "Q",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/Fv1WZYE.png"
+                },
+                {
+                    "title": "R",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/4lf1dsK.png"
+                },
+                {
+                    "title": "S",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/yWYkMgo.png"
+                },
+                {
+                    "title": "T",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/XtaoaNt.png"
+                },
+                {
+                    "title": "U",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/czqi755.png"
+                },
+                {
+                    "title": "V",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/Tds3wsi.png"
+                },
+                {
+                    "title": "W",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/W4ufen5.png"
+                },
+                {
+                    "title": "X",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/U3IhspK.png"
+                },
+                {
+                    "title": "Y",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/vlmhTCH.png"
+                },
+                {
+                    "title": "Z",
+                    "instructions": "",
+                    "image": "https://i.imgur.com/E5lXeRH.png"
+                }
+            ]
+        }
+    ]
+}
