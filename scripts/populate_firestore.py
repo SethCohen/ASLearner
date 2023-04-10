@@ -31,6 +31,10 @@ with open(dataPath) as f:
     
     # Creates deck
     for deck in data["lessons"]:
+        # Checks if deck already exists, if so, skips to next deck
+        if db.collection(u'decks').where(u'title', u'==', deck["title"]).get():
+            continue
+        
         deck_ref = db.collection(u'decks').document()
         batch.set(deck_ref, {
             u'title': deck["title"],

@@ -135,6 +135,112 @@
                     "image": "https://i.imgur.com/E5lXeRH.png"
                 }
             ]
+        },
+        {
+            "title": "Lesson 02",
+            "description": "",
+            "cards": [
+                {
+                    "title": "AGAIN / REPEAT",
+                    "instructions": "Handshape: Right hand = \"bent-hand\" Left hand = \"flat hand\"\nPalm Orientation: Right hand = starts facing up or at a \"10 o'clock\" position. Left hand = varies: palm up, palm right, or \"neutral 2 o'clock position\"\nMovement: Right hand moves in an arc until the fingertips touch the left palm.",
+                    "image": "https://i.postimg.cc/wxPjdJny/again.png"
+                },
+                {
+                    "title": "DEAF",
+                    "instructions": "Handshape: index finger\nLocation:\nStarting location: On the cheek near the ear.\nEnding location: On the cheek near the mouth.\nMovement: Small arc.",
+                    "image": "https://i.postimg.cc/904X7FwQ/deaf.png"
+                },
+                {
+                    "title": "HEARING",
+                    "instructions": "Movement: Movement is a small rotation. Up, forward, down, and back. Repeat twice.",
+                    "image": "https://i.postimg.cc/0y7QnQW6/hearing.png"
+                },
+                {
+                    "title": "LEARN",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/85XPcr5Y/learn.png"
+                },
+                {
+                    "title": "LIKE",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/Kz88m5ZL/like.png"
+                },
+                {
+                    "title": "MEANING / PURPOSE",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/DyJmW51P/meaning.png"
+                },
+                {
+                    "title": "MEET",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/1zPzjQ2v/meet.png"
+                },
+                {
+                    "title": "NAME",
+                    "instructions": "Handshape: \"H\" handshape on both hands.\nMovement: Double or single movement.",
+                    "image": "https://i.postimg.cc/h43fPNQG/name.png"
+                },
+                {
+                    "title": "NICE / CLEAN",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/yNPNqGzs/nice.png"
+                },
+                {
+                    "title": "NO",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/SR5sTzb9/no.png"
+                },
+                {
+                    "title": "SIGN",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/CdT0nCVc/sign.png"
+                },
+                {
+                    "title": "SLOW",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/3RNYsJBF/slow.png"
+                },
+                {
+                    "title": "TEACHER",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/rmHMMXZX/teacher.png"
+                },
+                {
+                    "title": "THANK you",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/zvR5ft4L/thank-you.png"
+                },
+                {
+                    "title": "UNDERSTAND",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/TYz1nm9M/understand.png"
+                },
+                {
+                    "title": "WHERE",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/VNYYFF0T/where.png"
+                },
+                {
+                    "title": "WHO",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/JzC7s8rR/who.png"
+                },
+                {
+                    "title": "WHY",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/02w25jqt/why.png"
+                },
+                {
+                    "title": "YES",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/SKDm1zWK/yes.png"
+                },
+                {
+                    "title": "YOUR",
+                    "instructions": "",
+                    "image": "https://i.postimg.cc/mk0LNf7N/your.png"
+                }
+            ]
         }
     ]
 }
