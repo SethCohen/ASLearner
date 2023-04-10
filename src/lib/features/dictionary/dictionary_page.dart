@@ -39,27 +39,35 @@ class _DictionaryPageState extends State<DictionaryPage> {
           return Text('error ${snapshot.error}');
         }
 
-        return SingleChildScrollView(
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: List.generate(
-              snapshot.docs.length,
-              (index) {
-                if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                  snapshot.fetchMore();
-                }
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scrollNotification) {
+            const double threshold = 200.0;
 
-                return ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: screenWidth * 0.15,
-                  ),
-                  child: Flashcard(
-                    card: snapshot.docs[index].data(),
-                    type: CardType.dictionary,
-                  ),
-                );
-              },
+            if (scrollNotification.metrics.pixels >=
+                    scrollNotification.metrics.maxScrollExtent - threshold &&
+                snapshot.hasMore) {
+              snapshot.fetchMore();
+            }
+            return false;
+          },
+          child: SingleChildScrollView(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: List.generate(
+                snapshot.docs.length,
+                (index) {
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: screenWidth * 0.15,
+                    ),
+                    child: Flashcard(
+                      card: snapshot.docs[index].data(),
+                      type: CardType.dictionary,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );
