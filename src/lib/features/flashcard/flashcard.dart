@@ -97,19 +97,34 @@ class _FlashcardState extends State<Flashcard> {
       );
 
   Widget _buildImage() => ClipRRect(
-        child: widget.type == CardType.dictionary
-            ? Image.network(
-                widget.card.image,
-                fit: BoxFit.cover,
-              )
-            : ImageFiltered(
-                enabled: _isImageBlurred,
-                imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-                child: Image.network(
-                  widget.card.image,
-                  fit: BoxFit.cover,
+        child: ImageFiltered(
+          enabled: widget.type != CardType.dictionary && _isImageBlurred,
+          imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
+          child: Image.network(
+            widget.card.image,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            loadingBuilder: (BuildContext context, Widget child,
+                ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              }
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
                 ),
-              ),
+              );
+            },
+            errorBuilder: (BuildContext context, Object exception,
+                StackTrace? stackTrace) {
+              debugPrint('Error loading image: $exception');
+              return const Text('Error loading image');
+            },
+          ),
+        ),
       );
 
   Widget _buildFlashcardButtons() {
