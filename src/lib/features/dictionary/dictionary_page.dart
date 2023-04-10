@@ -52,7 +52,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
                 return ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: screenWidth * 0.2,
+                    maxWidth: screenWidth * 0.15,
                   ),
                   child: Flashcard(
                     card: snapshot.docs[index].data(),
