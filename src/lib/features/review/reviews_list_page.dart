@@ -42,6 +42,11 @@ class _ReviewPageState extends State<ReviewPage> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               }
+              if (snapshot.data!.docs.isEmpty) {
+                return const Align(
+                    alignment: Alignment.topCenter,
+                    child: Text('Please do a lesson first to get a review.'));
+              }
 
               final card =
                   snapshot.data!.docs.first.data() as Map<String, dynamic>;
