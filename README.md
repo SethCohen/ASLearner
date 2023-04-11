@@ -48,9 +48,11 @@ FIREBASE_TOKEN="YOUR_FIREBASE_TOKEN_HERE" # Generated from $ firebase login:ci
 ```
 
 2. `$ docker compose build`
-3. Go to `http://localhost:7357/` in browser.
+3. Run the container with `$ docker compose up -d`
+4. Go to `http://localhost:7357/` in browser.
 
 ### Contributing
 
 1. Make your changes.
-2. Submit a pull request.
+2. Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard.
+3. Submit a pull request.

@@ -108,6 +108,7 @@ class _FlashcardState extends State<Flashcard> {
               if (loadingProgress == null) {
                 return child;
               }
+              // TODO fix loading box size to be a square box equal to the allowed image width
               return Center(
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null

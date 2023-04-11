@@ -1,11 +1,43 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:spaced_repetition/sm.dart';
 import '../../features/flashcard/flashcard_model.dart';
 
 final currentUser = FirebaseAuth.instance.currentUser!;
 
 class UserDataUtil {
+  static Future<void> updateLastLogin() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .get()
+        .then((user) {
+      final userData = user.data() as Map<String, dynamic>;
+      final lastLogin = userData['lastLogin'] as Timestamp;
+      final lastLearnt = userData['lastLearnt'] as Timestamp;
+      final now = DateTime.now();
+      final startOfDay = DateTime(now.year, now.month, now.day);
+      final loginTimeDifference = startOfDay.difference(lastLogin.toDate());
+      final lastLearntTimeDifference =
+          startOfDay.difference(lastLearnt.toDate());
+
+      if (loginTimeDifference.inHours >= 24 ||
+          lastLearntTimeDifference.inHours >= 24) {
+        FirebaseFirestore.instance.collection('users').doc(user.id).set({
+          'streak': 0,
+          'lastLogin': now,
+        }, SetOptions(merge: true));
+      } else {
+        FirebaseFirestore.instance.collection('users').doc(user.id).set({
+          'lastLogin': now,
+        }, SetOptions(merge: true));
+      }
+    }).catchError((error) {
+      debugPrint(error);
+    });
+  }
+
   static Future<void> updateLastLearnt() async {
     final user = await FirebaseFirestore.instance
         .collection('users')
