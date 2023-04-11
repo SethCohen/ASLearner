@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.15.0](https://github.com/SethCohen/ASLearner/compare/v1.14.0...v1.15.0) (2023-04-11)
+
+
+### Features
+
+* **flashcard:** added loading indicator ([8394db4](https://github.com/SethCohen/ASLearner/commit/8394db4bc450c7c831898b478879c75a279c032c))
+
+
+### Bug Fixes
+
+* **dictionary:** fixed scroll fetching ([c52d3b6](https://github.com/SethCohen/ASLearner/commit/c52d3b6870ce7c34e00d87c132fbcc6e22723911))
+* fixed streak system ([4b2a617](https://github.com/SethCohen/ASLearner/commit/4b2a617fe58f1e8fb36e0c60ec788879e4a29b43))
+* **reviews:** added check for no reviews available when no lessons completed ([5cbc6c5](https://github.com/SethCohen/ASLearner/commit/5cbc6c5f4a9c9ec9a6ddebcf10ece6cc12685c60))
+
+
+### Styles
+
+* **dictionary:** adjusted flashcard width ([930ee0e](https://github.com/SethCohen/ASLearner/commit/930ee0ef38ed05dfdd413220eb002124bdafbbe1))
+
+
+### Miscellaneous
+
+* added additional TODOs ([60f8328](https://github.com/SethCohen/ASLearner/commit/60f832877fbc84431400fe6d92d67eb00b0d91f4))
+* added firestore data adding script ([8d0aa36](https://github.com/SethCohen/ASLearner/commit/8d0aa3619b3a8e0fb3541decead31d1856b36644))
+* **populate_firestore:** added check for already existing deck ([47c5ad7](https://github.com/SethCohen/ASLearner/commit/47c5ad7b3f29225d070e4bec32425635bf68c294))
+* updated README.md ([60f8328](https://github.com/SethCohen/ASLearner/commit/60f832877fbc84431400fe6d92d67eb00b0d91f4))
+
+
+### Code Refactoring
+
+* **DataProvider:** DataProvider &gt; UserDataUtil, deprecated Provider. ([4b2a617](https://github.com/SethCohen/ASLearner/commit/4b2a617fe58f1e8fb36e0c60ec788879e4a29b43))
+* **dictionary:** code cleanup ([c933e34](https://github.com/SethCohen/ASLearner/commit/c933e343b04666f39ca11d8dfdf8228c22125c01))
+* **HomePage:** extracted several widgets into methods ([60f8328](https://github.com/SethCohen/ASLearner/commit/60f832877fbc84431400fe6d92d67eb00b0d91f4))
+* **HomePage:** moved _updateLastLogin into UserDataUtil ([60f8328](https://github.com/SethCohen/ASLearner/commit/60f832877fbc84431400fe6d92d67eb00b0d91f4))
+* **review:** review system refactored, deprecated Provider ([2f516ad](https://github.com/SethCohen/ASLearner/commit/2f516add126927cef135df6c6b677f7964046e0b))
+
 ## [1.14.0](https://github.com/SethCohen/ASLearner/compare/v1.13.0...v1.14.0) (2023-04-03)
 
 
