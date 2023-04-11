@@ -1,37 +1,51 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spaced_repetition/sm.dart';
 import '../../features/flashcard/flashcard_model.dart';
 
 final currentUser = FirebaseAuth.instance.currentUser!;
-const pageSize = 5;
 
-class DataProvider extends ChangeNotifier {
-  Future<void> updateCardProgress(FlashcardModel flashcard, int quality) async {
-    Sm sm = Sm();
-
-    // Updates streak
-    FirebaseFirestore.instance
+class UserDataUtil {
+  static Future<void> updateLastLearnt() async {
+    final user = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser.uid)
-        .get()
-        .then((user) {
-      final userData = user.data() as Map<String, dynamic>;
-      final lastLearnt = (userData['lastLearnt'] as Timestamp).toDate();
+        .get();
+
+    if (user.exists) {
+      user.reference.set({
+        'lastLearnt': DateTime.now(),
+      }, SetOptions(merge: true));
+    }
+  }
+
+  static Future<void> updateStreak() async {
+    final user = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .get();
+
+    if (user.exists) {
+      final lastLearnt = (user.data()!['lastLearnt'] as Timestamp).toDate();
       final now = DateTime.now();
       DateTime lastStreakUpdate =
           DateTime(lastLearnt.year, lastLearnt.month, lastLearnt.day);
       DateTime today = DateTime(now.year, now.month, now.day);
+      DateTime yesterday = today.subtract(const Duration(days: 1));
 
-      if (lastStreakUpdate != today) {
+      if (lastStreakUpdate == yesterday) {
         user.reference.set({
           'streak': FieldValue.increment(1),
         }, SetOptions(merge: true));
       }
-    }).catchError((error) {
-      debugPrint(error);
-    });
+    }
+
+    UserDataUtil.updateLastLearnt();
+  }
+
+  static Future<void> updateCardProgress(
+      FlashcardModel flashcard, int quality) async {
+    Sm sm = Sm();
 
     // Gets card progress for the current user
     final card = await FirebaseFirestore.instance
@@ -100,8 +114,6 @@ class DataProvider extends ChangeNotifier {
           SetOptions(merge: true));
 
       await batch.commit();
-
-      notifyListeners();
     }
   }
 }

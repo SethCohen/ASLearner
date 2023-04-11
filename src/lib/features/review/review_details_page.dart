@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../authentication/google_provider.dart';
+import '../../common/utils/user_data_util.dart';
 import '../flashcard/flashcard_model.dart';
 import 'review_model.dart';
 import '../flashcard/flashcard.dart';
@@ -41,14 +39,7 @@ class _ReviewState extends State<Review> {
   void _handleIndex() => setState(() {
         bool isCompleted = _currentCardIndex == widget.cards.length - 1;
         if (isCompleted) {
-          final currentUser = context.read<GoogleSignInProvider>().user;
-
-          FirebaseFirestore.instance
-              .collection("users")
-              .doc(currentUser!.uid)
-              .set({
-            'lastLearnt': DateTime.now(),
-          }, SetOptions(merge: true));
+          UserDataUtil.updateStreak();
 
           Navigator.pop(context);
         } else {

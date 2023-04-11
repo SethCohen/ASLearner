@@ -1,8 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'flashcard_model.dart';
-import '../../common/utils/data_provider.dart';
+import '../../common/utils/user_data_util.dart';
 import '../../common/widgets/custom_iconbutton.dart';
 
 enum CardType { review, dictionary, lesson }
@@ -160,7 +159,7 @@ class _FlashcardState extends State<Flashcard> {
       );
 
   void _handleButtonPress(FlashcardModel flashcard, int quality) {
-    context.read<DataProvider>().updateCardProgress(flashcard, quality);
+    UserDataUtil.updateCardProgress(flashcard, quality);
     widget.handleIndex!();
   }
 

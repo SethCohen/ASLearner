@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../authentication/google_provider.dart';
 
 class Lesson {
   Lesson(
@@ -48,7 +49,7 @@ class LessonsPage extends StatelessWidget {
         String deckId = deckSnapshot.id;
 
         return StreamBuilder<DocumentSnapshot>(
-          stream: _getUserDeckProgress(deckId),
+          stream: _getUserDeckProgress(context, deckId),
           builder: (context, snapshot) {
             int userDeckCardCount = 0;
 
@@ -63,12 +64,11 @@ class LessonsPage extends StatelessWidget {
     );
   }
 
-  Stream<DocumentSnapshot> _getUserDeckProgress(deckId) {
-    final currentuser = FirebaseAuth.instance.currentUser!;
-
+  Stream<DocumentSnapshot> _getUserDeckProgress(
+      BuildContext context, String deckId) {
     return FirebaseFirestore.instance
         .collection('users')
-        .doc(currentuser.uid)
+        .doc(context.read<GoogleSignInProvider>().user!.uid)
         .collection('deckProgress')
         .doc(deckId)
         .snapshots();

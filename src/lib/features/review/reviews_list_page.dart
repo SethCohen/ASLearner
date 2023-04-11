@@ -3,7 +3,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../common/utils/data_provider.dart';
 import '../authentication/google_provider.dart';
 import 'review_model.dart';
 
@@ -131,7 +130,8 @@ class _ReviewPageState extends State<ReviewPage> {
     return FirebaseFirestore.instance
         .collectionGroup('cards')
         .where('nextReview', isLessThan: DateTime.now())
-        .where('userId', isEqualTo: currentUser.uid)
+        .where('userId',
+            isEqualTo: context.read<GoogleSignInProvider>().user!.uid)
         .snapshots()
         .map((querySnapshot) {
       final reviewModelList = querySnapshot.docs.map((doc) {
@@ -143,11 +143,10 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Future<QuerySnapshot> _getNextAvailableReview() async {
-    final currentUser = context.read<GoogleSignInProvider>().user;
-
     return await FirebaseFirestore.instance
         .collectionGroup('cards')
-        .where('userId', isEqualTo: currentUser!.uid)
+        .where('userId',
+            isEqualTo: context.read<GoogleSignInProvider>().user!.uid)
         .orderBy('nextReview', descending: false)
         .limit(1)
         .get();
