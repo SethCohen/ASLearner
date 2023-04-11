@@ -14,18 +14,6 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    final flashcardsQuery = FirebaseFirestore.instance
-        .collectionGroup('cards')
-        .where('type', isEqualTo: 'immutable')
-        .orderBy('title')
-        .withConverter<FlashcardModel>(
-          fromFirestore: (snapshot, _) =>
-              FlashcardModel.fromMap(snapshot.data()!),
-          toFirestore: (flashcard, _) => flashcard.toMap(),
-        );
-
     // TODO add search bar
 
     return FirestoreQueryBuilder<FlashcardModel>(
@@ -51,27 +39,46 @@ class _DictionaryPageState extends State<DictionaryPage> {
             return false;
           },
           child: SingleChildScrollView(
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: List.generate(
-                snapshot.docs.length,
-                (index) {
-                  return ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: screenWidth * 0.15,
-                    ),
-                    child: Flashcard(
-                      card: snapshot.docs[index].data(),
-                      type: CardType.dictionary,
-                    ),
-                  );
-                },
-              ),
-            ),
+            child: _buildFlashcardsGrid(context, snapshot),
           ),
         );
       },
+    );
+  }
+
+  Query<FlashcardModel> get flashcardsQuery => FirebaseFirestore.instance
+      .collectionGroup('cards')
+      .where('type', isEqualTo: 'immutable')
+      .orderBy('title')
+      .withConverter<FlashcardModel>(
+        fromFirestore: (snapshot, _) =>
+            FlashcardModel.fromMap(snapshot.data()!),
+        toFirestore: (flashcard, _) => flashcard.toMap(),
+      );
+
+  Widget _buildFlashcardsGrid(
+    BuildContext context,
+    FirestoreQueryBuilderSnapshot<FlashcardModel> snapshot,
+  ) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: List.generate(
+        snapshot.docs.length,
+        (index) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: screenWidth * 0.15,
+            ),
+            child: Flashcard(
+              card: snapshot.docs[index].data(),
+              type: CardType.dictionary,
+            ),
+          );
+        },
+      ),
     );
   }
 }
