@@ -1,39 +1,13 @@
-import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spaced_repetition/sm.dart';
 import '../../features/flashcard/flashcard_model.dart';
-import '../../features/review/review_model.dart';
 
 final currentUser = FirebaseAuth.instance.currentUser!;
 const pageSize = 5;
 
 class DataProvider extends ChangeNotifier {
-  Map<String, List<ReviewModel>> _reviews = {};
-
-  Map<String, List<ReviewModel>> get reviews => _reviews;
-
-  Future<void> loadReviews() async {
-    try {
-      final reviews = await FirebaseFirestore.instance
-          .collectionGroup('cards')
-          .where('nextReview', isLessThan: DateTime.now())
-          .where('userId', isEqualTo: currentUser.uid)
-          .get();
-
-      final reviewModelList = reviews.docs.map((doc) {
-        return ReviewModel.fromMap(doc.id, doc.data());
-      }).toList();
-      _reviews =
-          groupBy(reviewModelList, (ReviewModel review) => review.deckTitle);
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-    }
-
-    notifyListeners();
-  }
-
   Future<void> updateCardProgress(FlashcardModel flashcard, int quality) async {
     Sm sm = Sm();
 
@@ -129,14 +103,5 @@ class DataProvider extends ChangeNotifier {
 
       notifyListeners();
     }
-  }
-
-  void removeReview(String deckTitle) {
-    if (deckTitle == 'Review All') {
-      _reviews = {};
-    } else {
-      _reviews.remove(deckTitle);
-    }
-    notifyListeners();
   }
 }

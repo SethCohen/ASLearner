@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,75 +16,90 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   Map<String, List<ReviewModel>> _decks = {};
-  late Future<QuerySnapshot> _nextReviewFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<DataProvider>().loadReviews();
-
-    _nextReviewFuture = _getNextReview();
-  }
 
   @override
   Widget build(BuildContext context) {
-    _decks = context.watch<DataProvider>().reviews;
+    return Center(
+      child: StreamBuilder(
+          stream: _getAvailableReviews(),
+          builder: (BuildContext context,
+              AsyncSnapshot<Map<String, List<ReviewModel>>> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
 
-    if (_decks.isEmpty) {
-      // TODO cleanup
-      return Center(
-        child: FutureBuilder(
-            future: _nextReviewFuture,
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              if (snapshot.data!.docs.isEmpty) {
-                return const Align(
-                    alignment: Alignment.topCenter,
-                    child: Text('Please do a lesson first to get a review.'));
-              }
+            _decks = snapshot.data!;
 
-              final card =
-                  snapshot.data!.docs.first.data() as Map<String, dynamic>;
-              final formattedDate = DateFormat.yMMMd()
-                  .add_jm()
-                  .format((card['nextReview'] as Timestamp).toDate());
+            if (_decks.isEmpty) {
+              return _buildNoReviewsAvailable();
+            }
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                      'No reviews available. Please come back again later.'),
-                  snapshot.data!.docs.isEmpty
-                      ? const Text('Please do a lesson first to get a review.')
-                      : Text('Next review: $formattedDate'),
-                ],
-              );
-            }),
-      );
-    }
+            return Column(
+              children: [
+                _buildReviewAll(_decks),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: _decks.length,
+                      itemBuilder: (context, index) => _buildListItem(index)),
+                ),
+              ],
+            );
+          }),
+    );
+  }
 
-    final allCards = _decks.values.expand((element) => element).toList();
+  Widget _buildNoReviewsAvailable() {
+    return FutureBuilder(
+        future: _getNextAvailableReview(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          if (snapshot.data!.docs.isEmpty) {
+            return _buildLessonWarning();
+          }
+          return _buildNextAvailableReviewWarning(snapshot);
+        });
+  }
+
+  Widget _buildNextAvailableReviewWarning(snapshot) {
+    final card = snapshot.data!.docs.first.data() as Map<String, dynamic>;
+    final formattedDate = DateFormat.yMMMd()
+        .add_jm()
+        .format((card['nextReview'] as Timestamp).toDate());
+
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Card(
-            child: ListTile(
-                title: const Text('Review All'),
-                trailing: Text('${allCards.length}'),
-                onTap: () => _navigateToReview('Review All', allCards))),
-        Expanded(
-          child: ListView.builder(
-              itemCount: _decks.length,
-              itemBuilder: (context, index) => _buildListItem(index)),
-        )
+        const Text('No reviews available. Please come back again later.'),
+        Text('Next review: $formattedDate'),
       ],
     );
+  }
+
+  Widget _buildLessonWarning() {
+    return const Align(
+        alignment: Alignment.topCenter,
+        child: Text(
+            'No reviews available. Please do a lesson first to get a review.'));
+  }
+
+  Widget _buildReviewAll(Map<String, List<ReviewModel>> decks) {
+    final List<ReviewModel> allCards =
+        decks.values.expand((element) => element).toList();
+
+    return Card(
+        child: ListTile(
+            title: const Text('Review All'),
+            trailing: Text('${allCards.length}'),
+            onTap: () => _navigateToReview('Review All', allCards)));
   }
 
   Widget _buildListItem(index) {
@@ -98,7 +114,7 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
-  _navigateToReview(String deckTitle, List<ReviewModel> cards) {
+  void _navigateToReview(String deckTitle, List<ReviewModel> cards) {
     final url = '/${deckTitle.toLowerCase().replaceAll('lesson ', 'review_')}';
 
     Navigator.pushNamed(
@@ -111,7 +127,22 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
-  Future<QuerySnapshot> _getNextReview() async {
+  Stream<Map<String, List<ReviewModel>>> _getAvailableReviews() {
+    return FirebaseFirestore.instance
+        .collectionGroup('cards')
+        .where('nextReview', isLessThan: DateTime.now())
+        .where('userId', isEqualTo: currentUser.uid)
+        .snapshots()
+        .map((querySnapshot) {
+      final reviewModelList = querySnapshot.docs.map((doc) {
+        return ReviewModel.fromMap(doc.id, doc.data());
+      }).toList();
+
+      return groupBy(reviewModelList, (ReviewModel review) => review.deckTitle);
+    });
+  }
+
+  Future<QuerySnapshot> _getNextAvailableReview() async {
     final currentUser = context.read<GoogleSignInProvider>().user;
 
     return await FirebaseFirestore.instance

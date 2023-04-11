@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../authentication/google_provider.dart';
 import '../flashcard/flashcard_model.dart';
 import 'review_model.dart';
-import '../../common/utils/data_provider.dart';
 import '../flashcard/flashcard.dart';
 
 class Review extends StatefulWidget {
@@ -51,7 +50,6 @@ class _ReviewState extends State<Review> {
             'lastLearnt': DateTime.now(),
           }, SetOptions(merge: true));
 
-          context.read<DataProvider>().removeReview(widget.title);
           Navigator.pop(context);
         } else {
           _currentCardIndex++;
